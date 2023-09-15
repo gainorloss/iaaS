@@ -24,6 +24,10 @@ namespace Dev.API.Controllers
             _jwt = jwt;
         }
 
+        /// <summary>
+        /// 获取授权
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous,HttpGet]
         [RT]
         public RestResult Auth()
@@ -38,6 +42,10 @@ namespace Dev.API.Controllers
             return RestResult.Succeed(token);
         }
 
+        /// <summary>
+        /// 访客
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public RestResult Profile()
         {

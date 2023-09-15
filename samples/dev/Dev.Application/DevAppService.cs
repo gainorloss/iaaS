@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 namespace Dev.Application
 {
     /// <summary>
-    /// Sample app service.
+    /// 示例
     /// </summary>
     [RestController("dev")]
     public class DevAppService
         : ApplicationService, IDevAppService
     {
         /// <summary>
-        ///  Get count.
+        ///  Get .
         /// </summary>
         /// <returns></returns>  
         [HttpGet]
@@ -29,7 +29,7 @@ namespace Dev.Application
         }
 
         /// <summary>
-        /// Create.
+        /// post.
         /// </summary>
         /// <returns></returns>
         [HttpPost]
@@ -39,7 +39,11 @@ namespace Dev.Application
             return RestResult.Succeed(false);
         }
 
-
+        /// <summary>
+        /// 抛出异常
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         [HttpPost]
         public async Task<RestResult> ThrowExceptionAsync()
         {
@@ -47,7 +51,11 @@ namespace Dev.Application
             throw new InvalidOperationException();
         }
 
-
+        /// <summary>
+        /// 分页获取
+        /// </summary>
+        /// <param name="requestDto"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<RestResult> PageGetAsync(PagedRequestDto requestDto)
         {

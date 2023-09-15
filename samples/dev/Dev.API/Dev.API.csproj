@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.AspNetCore.DynamicApi\Galosoft.IaaS.AspNetCore.DynamicApi.csproj" />
     <ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.AspNetCore\Galosoft.IaaS.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.Core\Galosoft.IaaS.Core.csproj" />
     <ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.OpenTelemetry\Galosoft.IaaS.OpenTelemetry.csproj" />
     <ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.Redis\Galosoft.IaaS.Redis.csproj" />
     <ProjectReference Include="..\Dev.Application\Dev.Application.csproj" />

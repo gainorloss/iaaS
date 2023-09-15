@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Dev.ConsoleApp.Entities;
+using Dev.Core.Entities;
 using Galosoft.IaaS.AspNetCore.DynamicApi;
 using Galosoft.IaaS.Core;
 using Microsoft.AspNetCore.Mvc;
@@ -31,9 +32,7 @@ namespace UserCenter.Application
         [HttpGet]
         public async Task<RestResult> AllAsync()
         {
-            var cnn = _ctx.Database.GetDbConnection();
-            var users = await cnn.QueryAsync(@"SELECT *
-from uc.uc_users uu ");
+            var users = await _ctx.Query<User>().ToListAsync();
 
             return RestResult.Succeed(users);
         }
