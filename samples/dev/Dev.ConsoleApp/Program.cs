@@ -62,7 +62,7 @@ namespace Dev.ConsoleApp
 
             services.AddDynamicProxy();
             services.AddTransient<LoggingDynamicInterceptor>();
-            services.AddDbContext<OrderDbContext>(opt =>
+            services.AddDbContext<AdminDbContext>(opt =>
             {
                 opt.UseSqlServer("Data Source = 118.31.35.176,5001; Initial Catalog = ppmerp; Integrated Security = False; User ID = sa; Password = !?abc1234; MultipleActiveResultSets=true;Application Name=ppmerp;connection timeout=600");
 

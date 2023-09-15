@@ -4,10 +4,10 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Dev.ConsoleApp.Entities
 {
-    public class OrderDbContext
-        : DbContextBase<OrderDbContext>
+    public class AdminDbContext
+        : DbContextBase<AdminDbContext>
     {
-        public OrderDbContext([NotNull] DbContextOptions<OrderDbContext> options) : base(options)
+        public AdminDbContext([NotNull] DbContextOptions<AdminDbContext> options) : base(options)
         {
         }
 

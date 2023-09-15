@@ -8,12 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="microsoft.aspnetcore.authentication.jwtbearer" Version="6.0.0" />
-    <PackageReference Include="microsoft.aspnetcore.identity.entityframeworkcore" Version="5.0.9" />
-    <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="7.0.5" />
-    <PackageReference Include="microsoft.entityframeworkcore.tools" Version="5.0.9">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
+    <PackageReference Include="microsoft.aspnetcore.identity.entityframeworkcore" Version="6.0.22" />
+    <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="6.0.22" />
     <PackageReference Include="nacos-sdk-csharp.aspnetcore" Version="1.3.4" />
     <PackageReference Include="nacos-sdk-csharp.extensions.configuration" Version="1.3.4" />
     <PackageReference Include="polly" Version="7.2.3" />
@@ -22,8 +18,18 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.AspNetCore.DynamicApi\Galosoft.IaaS.AspNetCore.DynamicApi.csproj" />
     <ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.AspNetCore\Galosoft.IaaS.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.OpenTelemetry\Galosoft.IaaS.OpenTelemetry.csproj" />
     <ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.Redis\Galosoft.IaaS.Redis.csproj" />
     <ProjectReference Include="..\Dev.Application\Dev.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="compose.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Dockerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

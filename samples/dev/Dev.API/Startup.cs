@@ -1,3 +1,4 @@
+using Dev.ConsoleApp.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -15,10 +16,12 @@ namespace Dev.API
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        public IHostEnvironment Environment { get; }
 
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration,IHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
@@ -30,7 +33,7 @@ namespace Dev.API
             services.AddControllers(opt =>
             {
                 opt.Filters.Add<GlobalLogExceptionFilter>();
-                opt.Filters.Add<GlobalModelStateValidationActionFilter>();
+                //opt.Filters.Add<GlobalModelStateValidationActionFilter>();
             })
             //    .AddRestControllers(opt =>//感觉没必要 galosoft@2023-5-6 17:57:01
             //{
@@ -44,6 +47,8 @@ namespace Dev.API
 
             //Jwt bearer
             services.AddJwtBearerAuthentication(Configuration.GetSection("Jwt"));
+            services.AddDbContext<AdminDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddOpenTelemetryObservability(Configuration, $"{Environment.ApplicationName}.{Environment.EnvironmentName}");
 
         }
 
@@ -56,14 +61,21 @@ namespace Dev.API
                 app.UseSwaggerGen();
             }
 
+            app.UseCors(builder => builder
+            .WithOrigins("http://localhost:3000", "http://localhost:7000", "http://localhost:7002")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+
             app.UseGlobalExceptionHandler();
-            app.UseRequestLogging();
             app.UseRouting();
+            app.UseRequestLogging();
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapEnvironments();
                 endpoints.MapGet("/", async context =>
                 {
                     await context.Response.WriteAsync("Hello World!");

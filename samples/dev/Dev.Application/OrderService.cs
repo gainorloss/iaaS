@@ -10,9 +10,9 @@ namespace Dev.Application
 {
     public class OrderService
     {
-        private readonly OrderDbContext _ctx;
+        private readonly AdminDbContext _ctx;
 
-        public OrderService(OrderDbContext ctx)
+        public OrderService(AdminDbContext ctx)
         {
             _ctx = ctx;
         }
