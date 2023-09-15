@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Galosoft.IaaS.Quartz": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:49563;http://localhost:49566"
+    }
+  }
+}

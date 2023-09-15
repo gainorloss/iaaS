@@ -1,0 +1,14 @@
+﻿{
+  "profiles": {
+    "OrleansSilo": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "api/stocks/change",
+      "applicationUrl": "http://localhost:5119",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="../../../common.props" />
+	<ItemGroup>
+	  <PackageReference Include="fluentvalidation" Version="11.6.0" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\Galosoft.IaaS.Core\Galosoft.IaaS.Core.csproj" />
+	</ItemGroup>
+
+</Project>

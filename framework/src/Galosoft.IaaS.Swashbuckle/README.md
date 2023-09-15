@@ -1,0 +1,2 @@
+﻿csproj:
+<GenerateDocumentationFile>true</GenerateDocumentationFile>

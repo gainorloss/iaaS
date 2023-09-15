@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../../common.props"/>
+
+  <ItemGroup>
+    <Folder Include="System\ComponentModel\DataAnnotations\" />
+    <PackageReference Include="microsoft.extensions.dependencymodel" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>

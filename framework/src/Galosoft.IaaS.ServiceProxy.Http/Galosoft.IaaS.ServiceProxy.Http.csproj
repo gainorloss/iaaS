@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="../../../common.props"/>
+
+	<ItemGroup>
+		<PackageReference Include="microsoft.extensions.dependencyinjection" Version="5.0.2" />
+		<PackageReference Include="microsoft.extensions.http" Version="5.0.0" />
+		<PackageReference Include="system.net.http.json" Version="5.0.0" />
+		<PackageReference Include="microsoft.aspnetcore.headerpropagation" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Galosoft.IaaS.ComponentModel\Galosoft.IaaS.ComponentModel.csproj" />
+		<ProjectReference Include="..\Galosoft.IaaS.Core\Galosoft.IaaS.Core.csproj" />
+	</ItemGroup>
+
+</Project>

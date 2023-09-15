@@ -1,0 +1,132 @@
+version: '3'
+services:
+  it-tools:
+    image: corentinth/it-tools@sha256:fd8f07e43e4fa8934cd6675aff21d33b4aaaafb3177cd861723178898bd6d9e6
+    ports:
+      - 3420:80
+    networks:
+      - it-tools
+  # musicn:
+  #   image: ghcr.io/wy580477/musicn-container:latest
+  #   restart: unless-stopped
+  #   entrypoint: ["/sbin/tini", "--", "msc", "-q"]
+  #   ports:
+  #     - "7478:7478"
+  #   volumes:
+  #     - ./musicn/data:/data
+  #   networks:
+  #     - it-tools
+  # reader 在线阅读
+# 手动更新方式 : docker-compose pull && docker-compose up -d
+  reader:
+    image: hectorqin/reader
+    #image: hectorqin/reader:openj9-latest #docker镜像，arm64架构或小内存机器优先使用此镜像.启用需删除上一行
+    container_name: reader #容器名 可自行修改
+    restart: always
+    ports:
+      - 4396:8080 #4396端口映射可自行修改
+    networks:
+      -  it-tools
+    volumes:
+      - /home/reader/logs:/logs #log映射目录 /home/reader/logs 映射目录可自行修改
+      - /home/reader/storage:/storage #数据映射目录 /home/reader/storage 映射目录可自行修改
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - READER_APP_USERLIMIT=50 #用户上限,默认50
+      - READER_APP_USERBOOKLIMIT=200 #用户书籍上限,默认200
+      - READER_APP_CACHECHAPTERCONTENT=true #开启缓存章节内容 V2.0
+      # 如果启用远程webview，需要取消注释下面的 remote-webview 服务
+      # - READER_APP_REMOTEWEBVIEWAPI=http://remote-webview:8050 #开启远程webview
+      # 下面都是多用户模式配置
+      - READER_APP_SECURE=true #开启登录鉴权，开启后将支持多用户模式
+      - READER_APP_SECUREKEY=adminpwd  #管理员密码  建议修改
+      - READER_APP_INVITECODE=registercode #注册邀请码 建议修改,如不需要可注释或删除
+  # remote-webview:
+  #   image: hectorqin/remote-webview
+  #   container_name: remote-webview #容器名 可自行修改
+  #   restart: always
+  #   ports:
+  #     - 8050:8050
+  #   networks:
+  #     - share_net
+  # 自动更新docker镜像
+  alist:
+    image: 'xhofe/alist:latest'
+    container_name: alist
+    restart: always
+    volumes:
+        - alist-data:/opt/alist/data
+    ports:
+        - '5244:5244'
+    environment:
+        - PUID=0
+        - PGID=0
+        - UMASK=022
+  easy-image:
+    image: ddsderek/easyimage:latest
+    container_name: easyimage
+    restart: unless-stopped
+    ports:
+      - 8811:80
+    environment:
+      - TZ=Asia/Shanghai
+      - PUID=1000
+      - PGID=1000
+      - DEBUG=false
+    volumes:
+      - easyimage-config:/app/web/config
+      - easyimage-data:/app/web/i
+  nginx-proxy-manager:
+    image: jlesage/nginx-proxy-manager
+    ports:
+      - 7181:8181
+      - 4443:4443
+      - 7080:8080
+    volumes:
+      - ./nginx-proxy-manager/config:/config
+    networks:
+      - it-tools
+  ikaros:
+    image: ikarosrun/ikaros:v0.7.4
+    ports:
+      - 9997:9999
+    volumes:
+      - ./ikaros:/root/.ikaros
+    command: --ikaros.security.initializer.master-username=galoS --ikaros.security.initializer.master-password=p@ssw0rd
+    restart: unless-stopped
+    networks:
+      - it-tools
+  actual-server: # 财务
+    image: actualbudget/actual-server:latest
+    ports:
+      - 15006:5006
+    restart: unless-stopped
+    volumes:
+      - ./actual/data:/data
+    networks:
+      - it-tools
+  actual: # 财务
+    image: wbsu2003/actual:v1
+    ports:
+      - 15005:80
+    restart: unless-stopped
+    volumes:
+      - ./actual/app:/app
+    networks:
+      - it-tools
+  orangehrm: # HRM
+    image: orangehrm/orangehrm:latest
+    container_name: orangehrm
+    ports:
+      - 8800:80 
+    environment:
+      - PUID=1000
+      - PGID=1000
+    restart: unless-stopped
+networks:
+  it-tools:
+    driver: bridge
+volumes:
+  alist-data:
+  easyimage-config:
+  easyimage-data:

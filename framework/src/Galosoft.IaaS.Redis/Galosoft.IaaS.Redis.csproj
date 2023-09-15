@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="../../../common.props" />
+
+	<ItemGroup>
+		<PackageReference Include="communitytoolkit.diagnostics" Version="8.2.0" />
+		<PackageReference Include="freeredis" Version="1.0.8" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Galosoft.IaaS.Core\Galosoft.IaaS.Core.csproj" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../../common.props" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\Galosoft.IaaS.AspNetCore.SignalR\Galosoft.IaaS.AspNetCore.SignalR.csproj" />
+    <ProjectReference Include="..\Galosoft.IaaS.Serilog\Galosoft.IaaS.Serilog.csproj" />
+    <ProjectReference Include="..\Galosoft.IaaS.Swashbuckle\Galosoft.IaaS.Swashbuckle.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Microsoft\Extensions\DependencyInjection\" />
+  </ItemGroup>
+
+</Project>

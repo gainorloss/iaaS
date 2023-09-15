@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: always
+    # 环境变量,设置为上海时区
+    environment:
+        - TZ=Asia/Shanghai
+    volumes:
+      - "-/run/user/1000/podman/podman.sock:/var/run/docker.sock"
+    command: reader watchtower --cleanup --schedule "0 0 4 * * *"

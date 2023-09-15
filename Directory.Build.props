@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Galosoft</Authors>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix>alpha1</VersionSuffix>
+  </PropertyGroup>
+</Project>

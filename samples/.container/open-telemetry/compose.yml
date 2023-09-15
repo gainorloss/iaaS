@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  zipkin:
+    image: quay.io/openzipkin/zipkin:2.18
+    container_name: zipkin
+    ports:
+      - 9411:9411

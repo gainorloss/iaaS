@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../../common.props"/>
+
+  <ItemGroup>
+    <FrameworkReference Include="microsoft.aspnetcore.app" Version="2.2.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="microsoft.aspnetcore.signalr.protocols.messagepack" Version="5.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Galosoft.IaaS.AspNetCore.SignalR.Core\Galosoft.IaaS.AspNetCore.SignalR.Core.csproj" />
+  </ItemGroup>
+</Project>

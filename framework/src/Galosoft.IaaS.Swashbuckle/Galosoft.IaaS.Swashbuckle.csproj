@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../../common.props"/>
+
+  <ItemGroup>
+    <PackageReference Include="swashbuckle.aspnetcore" Version="6.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Galosoft.IaaS.Core\Galosoft.IaaS.Core.csproj" />
+  </ItemGroup>
+
+</Project>

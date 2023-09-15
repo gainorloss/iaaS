@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="stateless" Version="5.12.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.Castle\Galosoft.IaaS.Castle.csproj" />
+		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.Dapper\Galosoft.IaaS.Dapper.csproj" />
+		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.Dev.Stopwatch\Galosoft.IaaS.Dev.Stopwatch.csproj" />
+		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.EntityFrameworkCore\Galosoft.IaaS.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.RabbitMQ\Galosoft.IaaS.RabbitMQ.csproj" />
+		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.Redis\Galosoft.IaaS.Redis.csproj" />
+		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.ServiceProxy.Http\Galosoft.IaaS.ServiceProxy.Http.csproj" />
+	</ItemGroup>
+
+</Project>

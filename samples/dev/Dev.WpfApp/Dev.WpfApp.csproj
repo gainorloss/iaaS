@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+		<UseWindowsForms>true</UseWindowsForms>
+		<PackageIcon>33.png</PackageIcon>
+		<ApplicationIcon>Resources\33.ico</ApplicationIcon>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Remove="Resources\33.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="Resources\33.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="mahapps.metro.iconpacks" Version="4.11.0" />
+		<PackageReference Include="materialdesignthemes.mahapps" Version="0.3.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.Wpf\Galosoft.IaaS.Wpf.csproj" />
+		<ProjectReference Include="..\Dev.Core\Dev.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Resources\33.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Resources\33.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>

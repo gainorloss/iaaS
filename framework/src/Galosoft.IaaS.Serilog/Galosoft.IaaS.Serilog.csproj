@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../../common.props"/>
+
+  <ItemGroup>
+    <PackageReference Include="serilog.aspnetcore" Version="4.1.0" />
+    <PackageReference Include="serilog.sinks.async" Version="1.5.0" />
+    <PackageReference Include="serilog.sinks.seq" Version="5.0.1" />
+    <PackageReference Include="serilog.sinks.trace" Version="3.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Galosoft.IaaS.Core\Galosoft.IaaS.Core.csproj" />
+  </ItemGroup>
+
+</Project>

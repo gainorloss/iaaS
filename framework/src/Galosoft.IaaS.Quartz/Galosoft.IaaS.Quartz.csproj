@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="../../../common.props"/>
+
+  <ItemGroup>
+    <PackageReference Include="quartz" Version="3.3.3" />
+    <PackageReference Include="quartz.extensions.dependencyinjection" Version="3.3.3" />
+  </ItemGroup>
+
+</Project>

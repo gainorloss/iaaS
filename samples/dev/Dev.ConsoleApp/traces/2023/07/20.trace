@@ -1,0 +1,324 @@
+【10:20:57】Dev.ConsoleApp Information: 0 : 【10:20:57】	依赖数量【151】,加载程序集【11】,加载具体类【113】
+【10:20:57】Dev.ConsoleApp Information: 0 : 【10:20:57】	扫描到项目组件类”	【2】,已全部加载
+【10:20:57】Dev.ConsoleApp Error: 0 : 【10:20:57】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c.<ExecuteAsync>b__12_2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 83
+   at Polly.Policy.<>c__DisplayClass108_0.<Execute>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:21:00】Dev.ConsoleApp Error: 0 : 【10:21:00】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c.<ExecuteAsync>b__12_2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 83
+   at Polly.Policy.<>c__DisplayClass108_0.<Execute>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:21:04】Dev.ConsoleApp Error: 0 : 【10:21:04】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c.<ExecuteAsync>b__12_2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 83
+   at Polly.Policy.<>c__DisplayClass108_0.<Execute>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:21:37】Dev.ConsoleApp Information: 0 : 【10:21:37】	依赖数量【151】,加载程序集【11】,加载具体类【113】
+【10:21:37】Dev.ConsoleApp Information: 0 : 【10:21:37】	扫描到项目组件类”	【2】,已全部加载
+【10:21:38】Dev.ConsoleApp Error: 0 : 【10:21:38】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c.<ExecuteAsync>b__12_2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 83
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:21:40】Dev.ConsoleApp Error: 0 : 【10:21:40】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c.<ExecuteAsync>b__12_2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 83
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:21:44】Dev.ConsoleApp Error: 0 : 【10:21:44】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c.<ExecuteAsync>b__12_2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 83
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:21:52】Microsoft.Hosting.Lifetime: Information: Application started. Press Ctrl+C to shut down.
+【10:21:52】Microsoft.Hosting.Lifetime: Information: Hosting environment: Production
+【10:21:52】Microsoft.Hosting.Lifetime: Information: Content root path: G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp
+【10:22:39】Dev.ConsoleApp Information: 0 : 【10:22:39】	依赖数量【151】,加载程序集【11】,加载具体类【113】
+【10:22:39】Dev.ConsoleApp Information: 0 : 【10:22:39】	扫描到项目组件类”	【2】,已全部加载
+【10:22:40】Dev.ConsoleApp Error: 0 : 【10:22:40】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c.<ExecuteAsync>b__12_2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 83
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:22:42】Dev.ConsoleApp Error: 0 : 【10:22:42】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c.<ExecuteAsync>b__12_2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 83
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:22:46】Dev.ConsoleApp Error: 0 : 【10:22:46】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c.<ExecuteAsync>b__12_2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 83
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:22:54】Dev.ConsoleApp Information: 0 : 【10:22:54】	Polly.PolicyResult
+【10:22:54】Microsoft.Hosting.Lifetime: Information: Application started. Press Ctrl+C to shut down.
+【10:22:54】Microsoft.Hosting.Lifetime: Information: Hosting environment: Production
+【10:22:54】Microsoft.Hosting.Lifetime: Information: Content root path: G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp
+【10:23:43】Dev.ConsoleApp Information: 0 : 【10:23:43】	依赖数量【151】,加载程序集【11】,加载具体类【114】
+【10:23:43】Dev.ConsoleApp Information: 0 : 【10:23:43】	扫描到项目组件类”	【2】,已全部加载
+【10:23:43】Dev.ConsoleApp Error: 0 : 【10:23:43】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c__DisplayClass12_0.<ExecuteAsync>b__2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 86
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:24:07】Dev.ConsoleApp Information: 0 : 【10:24:07】	依赖数量【151】,加载程序集【11】,加载具体类【114】
+【10:24:07】Dev.ConsoleApp Information: 0 : 【10:24:07】	扫描到项目组件类”	【2】,已全部加载
+【10:24:08】Dev.ConsoleApp Error: 0 : 【10:24:08】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c__DisplayClass12_0.<ExecuteAsync>b__2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 86
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:24:10】Dev.ConsoleApp Error: 0 : 【10:24:10】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c__DisplayClass12_0.<ExecuteAsync>b__2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 86
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:24:14】Dev.ConsoleApp Error: 0 : 【10:24:14】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c__DisplayClass12_0.<ExecuteAsync>b__2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 86
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:24:22】Dev.ConsoleApp Information: 0 : 【10:24:22】	Polly.PolicyResult
+【10:24:22】Dev.ConsoleApp Information: 0 : 【10:24:22】	0
+【10:24:22】Dev.ConsoleApp Information: 0 : 【10:24:22】	Polly.PolicyResult
+【10:24:22】Dev.ConsoleApp Information: 0 : 【10:24:22】	1
+【10:24:22】Microsoft.Hosting.Lifetime: Information: Application started. Press Ctrl+C to shut down.
+【10:24:22】Microsoft.Hosting.Lifetime: Information: Hosting environment: Production
+【10:24:22】Microsoft.Hosting.Lifetime: Information: Content root path: G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp
+【10:25:10】Dev.ConsoleApp Information: 0 : 【10:25:10】	依赖数量【151】,加载程序集【11】,加载具体类【114】
+【10:25:10】Dev.ConsoleApp Information: 0 : 【10:25:10】	扫描到项目组件类”	【2】,已全部加载
+【10:25:10】Dev.ConsoleApp Error: 0 : 【10:25:10】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c__DisplayClass12_0.<ExecuteAsync>b__2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 86
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:25:12】Dev.ConsoleApp Error: 0 : 【10:25:12】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c__DisplayClass12_0.<ExecuteAsync>b__2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 86
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:25:16】Dev.ConsoleApp Error: 0 : 【10:25:16】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c__DisplayClass12_0.<ExecuteAsync>b__2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 86
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【10:25:24】Dev.ConsoleApp Information: 0 : 【10:25:24】	0
+【10:25:24】Dev.ConsoleApp Information: 0 : 【10:25:24】	1
+【10:25:24】Microsoft.Hosting.Lifetime: Information: Application started. Press Ctrl+C to shut down.
+【10:25:24】Microsoft.Hosting.Lifetime: Information: Hosting environment: Production
+【10:25:24】Microsoft.Hosting.Lifetime: Information: Content root path: G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp
+【10:28:34】Dev.ConsoleApp Information: 0 : 【10:28:34】	依赖数量【151】,加载程序集【11】,加载具体类【114】
+【10:28:34】Dev.ConsoleApp Information: 0 : 【10:28:34】	扫描到项目组件类”	【2】,已全部加载
+【10:28:34】Dev.ConsoleApp Information: 0 : 【10:28:34】	重试1
+【10:28:36】Dev.ConsoleApp Information: 0 : 【10:28:36】	重试2
+【10:28:40】Dev.ConsoleApp Information: 0 : 【10:28:40】	重试3
+【10:28:48】Dev.ConsoleApp Information: 0 : 【10:28:48】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c__DisplayClass12_0.<ExecuteAsync>b__2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 86
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+   at Polly.Retry.RetryPolicy.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.Implementation(Action`2 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.Execute(Action`2 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.ExecuteAndCapture(Action`2 action, Context context, CancellationToken cancellationToken)
+【10:28:48】Dev.ConsoleApp Error: 0 : 【10:28:48】	0
+【10:28:48】Dev.ConsoleApp Error: 0 : 【10:28:48】	1
+【10:28:48】Microsoft.Hosting.Lifetime: Information: Application started. Press Ctrl+C to shut down.
+【10:28:48】Microsoft.Hosting.Lifetime: Information: Hosting environment: Production
+【10:28:48】Microsoft.Hosting.Lifetime: Information: Content root path: G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp
+【10:29:16】Dev.ConsoleApp Information: 0 : 【10:29:16】	依赖数量【151】,加载程序集【11】,加载具体类【114】
+【10:29:16】Dev.ConsoleApp Information: 0 : 【10:29:16】	扫描到项目组件类”	【2】,已全部加载
+【10:29:17】Dev.ConsoleApp Information: 0 : 【10:29:17】	重试1
+【10:29:19】Dev.ConsoleApp Information: 0 : 【10:29:19】	重试2
+【10:29:23】Dev.ConsoleApp Information: 0 : 【10:29:23】	重试3
+【10:29:31】Dev.ConsoleApp Information: 0 : 【10:29:31】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c__DisplayClass12_0.<ExecuteAsync>b__2() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 86
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+   at Polly.Retry.RetryPolicy.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.Implementation(Action`2 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.Execute(Action`2 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.ExecuteAndCapture(Action`2 action, Context context, CancellationToken cancellationToken)
+【10:29:31】Dev.ConsoleApp Information: 0 : 【10:29:31】	0
+【10:29:31】Dev.ConsoleApp Information: 0 : 【10:29:31】	1
+【10:29:31】Microsoft.Hosting.Lifetime: Information: Application started. Press Ctrl+C to shut down.
+【10:29:31】Microsoft.Hosting.Lifetime: Information: Hosting environment: Production
+【10:29:31】Microsoft.Hosting.Lifetime: Information: Content root path: G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp
+【10:34:40】Dev.ConsoleApp Information: 0 : 【10:34:40】	依赖数量【151】,加载程序集【11】,加载具体类【114】
+【10:34:40】Dev.ConsoleApp Information: 0 : 【10:34:40】	扫描到项目组件类”	【2】,已全部加载
+【10:34:41】Dev.ConsoleApp Information: 0 : 【10:34:41】	1:重试1
+【10:34:43】Dev.ConsoleApp Information: 0 : 【10:34:43】	1:重试2
+【10:34:47】Dev.ConsoleApp Information: 0 : 【10:34:47】	1:重试3
+【10:34:55】Dev.ConsoleApp Information: 0 : 【10:34:55】	System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.Bootstrapper.<>c__DisplayClass12_0.<ExecuteAsync>b__2(Context ctx) in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 87
+   at Polly.Policy.<>c__DisplayClass121_0.<ExecuteAndCapture>b__0(Context ctx, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+   at Polly.Retry.RetryPolicy.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.Implementation(Action`2 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.Execute(Action`2 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.ExecuteAndCapture(Action`2 action, Context context, CancellationToken cancellationToken)
+【10:34:55】Dev.ConsoleApp Information: 0 : 【10:34:55】	0
+【10:34:55】Dev.ConsoleApp Information: 0 : 【10:34:55】	1
+【10:34:55】Microsoft.Hosting.Lifetime: Information: Application started. Press Ctrl+C to shut down.
+【10:34:55】Microsoft.Hosting.Lifetime: Information: Hosting environment: Production
+【10:34:55】Microsoft.Hosting.Lifetime: Information: Content root path: G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp
+【11:39:45】Dev.ConsoleApp Information: 0 : 【11:39:45】	依赖数量【151】,加载程序集【11】,加载具体类【114】
+【11:39:45】Dev.ConsoleApp Information: 0 : 【11:39:45】	扫描到项目组件类”	【2】,已全部加载
+【12:14:11】Dev.ConsoleApp Information: 0 : 【12:14:11】	依赖数量【151】,加载程序集【11】,加载具体类【114】
+【12:14:11】Dev.ConsoleApp Information: 0 : 【12:14:11】	扫描到项目组件类”	【2】,已全部加载
+【12:14:12】Microsoft.Hosting.Lifetime: Information: Application started. Press Ctrl+C to shut down.
+【12:14:12】Microsoft.Hosting.Lifetime: Information: Hosting environment: Production
+【12:14:12】Microsoft.Hosting.Lifetime: Information: Content root path: G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp
+【12:14:14】Dev.ConsoleApp Information: 0 : 【12:14:14】	重试1，System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.SpringBootAmqpTestRequest.get_Bytes() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 204
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass8_0`1.<DistributeInternal>b__3(PropertyInfo i) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at System.Linq.Enumerable.SelectArrayIterator`2.MoveNext()
+   at System.String.JoinCore[T](ReadOnlySpan`1 separator, IEnumerable`1 values)
+   at RabbitMQ.Client.ConnectionExtensions.DistributeInternal[T](IConnectionFactory factory, String routeKey, Boolean broadcast, Dictionary`2 arguments, Boolean declared, T[] msgs) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass4_0`1.<Distribute>b__0() in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 52
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【12:14:16】Dev.ConsoleApp Information: 0 : 【12:14:16】	重试2，System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.SpringBootAmqpTestRequest.get_Bytes() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 204
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass8_0`1.<DistributeInternal>b__3(PropertyInfo i) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at System.Linq.Enumerable.SelectArrayIterator`2.MoveNext()
+   at System.String.JoinCore[T](ReadOnlySpan`1 separator, IEnumerable`1 values)
+   at RabbitMQ.Client.ConnectionExtensions.DistributeInternal[T](IConnectionFactory factory, String routeKey, Boolean broadcast, Dictionary`2 arguments, Boolean declared, T[] msgs) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass4_0`1.<Distribute>b__0() in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 52
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【12:14:20】Dev.ConsoleApp Information: 0 : 【12:14:20】	重试3，System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.SpringBootAmqpTestRequest.get_Bytes() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 204
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass8_0`1.<DistributeInternal>b__3(PropertyInfo i) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at System.Linq.Enumerable.SelectArrayIterator`2.MoveNext()
+   at System.String.JoinCore[T](ReadOnlySpan`1 separator, IEnumerable`1 values)
+   at RabbitMQ.Client.ConnectionExtensions.DistributeInternal[T](IConnectionFactory factory, String routeKey, Boolean broadcast, Dictionary`2 arguments, Boolean declared, T[] msgs) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass4_0`1.<Distribute>b__0() in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 52
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【12:14:28】Dev.ConsoleApp Information: 0 : 【12:14:28】	重试4，System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.SpringBootAmqpTestRequest.get_Bytes() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 204
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass8_0`1.<DistributeInternal>b__3(PropertyInfo i) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at System.Linq.Enumerable.SelectArrayIterator`2.MoveNext()
+   at System.String.JoinCore[T](ReadOnlySpan`1 separator, IEnumerable`1 values)
+   at RabbitMQ.Client.ConnectionExtensions.DistributeInternal[T](IConnectionFactory factory, String routeKey, Boolean broadcast, Dictionary`2 arguments, Boolean declared, T[] msgs) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass4_0`1.<Distribute>b__0() in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 52
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【12:14:44】Dev.ConsoleApp Information: 0 : 【12:14:44】	重试5，System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.SpringBootAmqpTestRequest.get_Bytes() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 204
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass8_0`1.<DistributeInternal>b__3(PropertyInfo i) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at System.Linq.Enumerable.SelectArrayIterator`2.MoveNext()
+   at System.String.JoinCore[T](ReadOnlySpan`1 separator, IEnumerable`1 values)
+   at RabbitMQ.Client.ConnectionExtensions.DistributeInternal[T](IConnectionFactory factory, String routeKey, Boolean broadcast, Dictionary`2 arguments, Boolean declared, T[] msgs) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass4_0`1.<Distribute>b__0() in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 52
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【12:15:16】Dev.ConsoleApp Error: 0 : 【12:15:16】	System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.SpringBootAmqpTestRequest.get_Bytes() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 204
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass8_0`1.<DistributeInternal>b__3(PropertyInfo i) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at System.Linq.Enumerable.SelectArrayIterator`2.MoveNext()
+   at System.String.JoinCore[T](ReadOnlySpan`1 separator, IEnumerable`1 values)
+   at RabbitMQ.Client.ConnectionExtensions.DistributeInternal[T](IConnectionFactory factory, String routeKey, Boolean broadcast, Dictionary`2 arguments, Boolean declared, T[] msgs) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass4_0`1.<Distribute>b__0() in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 52
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+   at Polly.Retry.RetryPolicy.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.Implementation(Action`2 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.Execute(Action`2 action, Context context, CancellationToken cancellationToken)
+   at Polly.Policy.ExecuteAndCapture(Action`2 action, Context context, CancellationToken cancellationToken)
+【12:15:17】Dev.ConsoleApp Information: 0 : 【12:15:17】	重试1，System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.SpringBootAmqpTestRequest.get_Bytes() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 204
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass8_0`1.<DistributeInternal>b__3(PropertyInfo i) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at System.Linq.Enumerable.SelectArrayIterator`2.MoveNext()
+   at System.String.JoinCore[T](ReadOnlySpan`1 separator, IEnumerable`1 values)
+   at RabbitMQ.Client.ConnectionExtensions.DistributeInternal[T](IConnectionFactory factory, String routeKey, Boolean broadcast, Dictionary`2 arguments, Boolean declared, T[] msgs) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass4_0`1.<Distribute>b__0() in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 52
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【12:15:19】Dev.ConsoleApp Information: 0 : 【12:15:19】	重试2，System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.SpringBootAmqpTestRequest.get_Bytes() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 204
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass8_0`1.<DistributeInternal>b__3(PropertyInfo i) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at System.Linq.Enumerable.SelectArrayIterator`2.MoveNext()
+   at System.String.JoinCore[T](ReadOnlySpan`1 separator, IEnumerable`1 values)
+   at RabbitMQ.Client.ConnectionExtensions.DistributeInternal[T](IConnectionFactory factory, String routeKey, Boolean broadcast, Dictionary`2 arguments, Boolean declared, T[] msgs) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass4_0`1.<Distribute>b__0() in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 52
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【14:48:49】Dev.ConsoleApp Information: 0 : 【14:48:49】	依赖数量【151】,加载程序集【11】,加载具体类【114】
+【14:48:49】Dev.ConsoleApp Information: 0 : 【14:48:49】	扫描到项目组件类”	【2】,已全部加载
+【14:48:50】Microsoft.Hosting.Lifetime: Information: Application started. Press Ctrl+C to shut down.
+【14:48:50】Microsoft.Hosting.Lifetime: Information: Hosting environment: Production
+【14:48:50】Microsoft.Hosting.Lifetime: Information: Content root path: G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp
+【14:48:51】Dev.ConsoleApp Information: 0 : 【14:48:51】	重试1，System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.SpringBootAmqpTestRequest.get_Bytes() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 204
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass8_0`1.<DistributeInternal>b__3(PropertyInfo i) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at System.Linq.Enumerable.SelectArrayIterator`2.MoveNext()
+   at System.String.JoinCore[T](ReadOnlySpan`1 separator, IEnumerable`1 values)
+   at RabbitMQ.Client.ConnectionExtensions.DistributeInternal[T](IConnectionFactory factory, String routeKey, Boolean broadcast, Dictionary`2 arguments, Boolean declared, T[] msgs) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass4_0`1.<Distribute>b__0() in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 52
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)
+【14:48:53】Dev.ConsoleApp Information: 0 : 【14:48:53】	重试2，System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> System.DivideByZeroException: Attempted to divide by zero.
+   at Dev.ConsoleApp.SpringBootAmqpTestRequest.get_Bytes() in G:\Samples\samplesOnIaaS\samples\dev\Dev.ConsoleApp\Bootstrapper.cs:line 204
+   --- End of inner exception stack trace ---
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Span`1& arguments, Signature sig, Boolean constructor, Boolean wrapExceptions)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass8_0`1.<DistributeInternal>b__3(PropertyInfo i) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at System.Linq.Enumerable.SelectArrayIterator`2.MoveNext()
+   at System.String.JoinCore[T](ReadOnlySpan`1 separator, IEnumerable`1 values)
+   at RabbitMQ.Client.ConnectionExtensions.DistributeInternal[T](IConnectionFactory factory, String routeKey, Boolean broadcast, Dictionary`2 arguments, Boolean declared, T[] msgs) in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 372
+   at RabbitMQ.Client.ConnectionExtensions.<>c__DisplayClass4_0`1.<Distribute>b__0() in G:\Samples\samplesOnIaaS\framework\src\Galosoft.IaaS.RabbitMQ\RabbitMQ\Client\ConnectionExtensions.cs:line 52
+   at Polly.Policy.<>c__DisplayClass120_0.<ExecuteAndCapture>b__0(Context _, CancellationToken _)
+   at Polly.Policy.<>c__DisplayClass138_0.<Implementation>b__0(Context ctx, CancellationToken token)
+   at Polly.Retry.RetryEngine.Implementation[TResult](Func`3 action, Context context, CancellationToken cancellationToken, ExceptionPredicates shouldRetryExceptionPredicates, ResultPredicates`1 shouldRetryResultPredicates, Action`4 onRetry, Int32 permittedRetryCount, IEnumerable`1 sleepDurationsEnumerable, Func`4 sleepDurationProvider)

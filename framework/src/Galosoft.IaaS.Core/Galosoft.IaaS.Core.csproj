@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="../../../common.props" />
+
+  <ItemGroup>
+    <PackageReference Include="microsoft.extensions.hosting" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Galosoft.IaaS.ComponentModel\Galosoft.IaaS.ComponentModel.csproj" />
+    <ProjectReference Include="..\Galosoft.IaaS.ObjectPool\Galosoft.IaaS.ObjectPool.csproj" />
+  </ItemGroup>
+
+</Project>
