@@ -17,7 +17,7 @@ namespace Microsoft.AspNetCore.Mvc.Filters
             {
                 var errors = context.ModelState.SelectMany(state => state.Value.Errors);
                 var errorMessages = string.Join(";", errors.Select(e => e.ErrorMessage));
-                context.Result = new JsonResult(Result.Fail(ResultCode.ParameterInvalid,$"实体验证失败:{errorMessages}", errors));
+                context.Result = new JsonResult(RestResult.Fail(RestResultCode.ParameterInvalid,$"实体验证失败:{errorMessages}", errors));
             }
         }
     }

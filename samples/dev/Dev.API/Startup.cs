@@ -1,3 +1,4 @@
+using Dev.Application;
 using Dev.ConsoleApp.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,7 +19,7 @@ namespace Dev.API
         public IConfiguration Configuration { get; }
         public IHostEnvironment Environment { get; }
 
-        public Startup(IConfiguration configuration,IHostEnvironment environment)
+        public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
             Environment = environment;
@@ -30,21 +31,7 @@ namespace Dev.API
             //services.AddNacosV2Config(Configuration);
             //services.AddNacosAspNet(Configuration);
             services.AddSwaggerGen("测试API");
-            services.AddControllers(opt =>
-            {
-                opt.Filters.Add<GlobalLogExceptionFilter>();
-                //opt.Filters.Add<GlobalModelStateValidationActionFilter>();
-            })
-            //    .AddRestControllers(opt =>//感觉没必要 galosoft@2023-5-6 17:57:01
-            //{
-            //    opt.Filters.Add<GlobalLogExceptionFilter>();
-            //    opt.Filters.Add<GlobalModelStateValidationActionFilter>();
-            //}, assemblies: new[]
-            //{
-            //    typeof(DevAppService).Assembly,
-            //})
-                //.ConfigureApiBehaviorOptions(o => o.SuppressModelStateInvalidFilter = true)
-                ;
+            services.AddRestControllers();
 
             //Jwt bearer
             services.AddJwtBearerAuthentication(Configuration.GetSection("Jwt"));

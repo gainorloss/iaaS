@@ -43,10 +43,10 @@ namespace Microsoft.AspNetCore.Mvc.Filters
 
                 if (_env.IsDevelopment())
                 {
-                    filterContext.Result = new JsonResult(Result.Fail(ResultCode.Error, $"接口请求异常，请联系管理员:{tempMsg}"));//In development,output exception message.
+                    filterContext.Result = new JsonResult(RestResult.Fail(RestResultCode.Error, $"接口请求异常，请联系管理员:{tempMsg}"));//In development,output exception message.
                 }
                 else
-                    filterContext.Result = new JsonResult(Result.Fail(ResultCode.Error, "接口请求异常，请联系管理员"));
+                    filterContext.Result = new JsonResult(RestResult.Fail(RestResultCode.Error, "接口请求异常，请联系管理员"));
                 filterContext.ExceptionHandled = true; // Tag it is handled.
             }
         }

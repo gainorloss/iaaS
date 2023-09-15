@@ -26,7 +26,7 @@ namespace Dev.API.Controllers
 
         [AllowAnonymous,HttpGet]
         [RT]
-        public Result Auth()
+        public RestResult Auth()
         {
             var identity = new ClaimsIdentity(new Claim[]
               {
@@ -35,14 +35,14 @@ namespace Dev.API.Controllers
               });
 
             var token = _jwt.GenerateToken(identity);
-            return Result.Succeed(token);
+            return RestResult.Succeed(token);
         }
 
         [HttpGet]
-        public Result Profile()
+        public RestResult Profile()
         {
             var claims = HttpContext.User.Claims.ToDictionary(c => c.Type, c => c.Value);
-            return Result.Succeed(claims);
+            return RestResult.Succeed(claims);
         }
     }
 }

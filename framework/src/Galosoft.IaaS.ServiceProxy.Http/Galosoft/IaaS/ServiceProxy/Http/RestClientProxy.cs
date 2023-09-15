@@ -13,7 +13,7 @@ namespace Galosoft.IaaS.ServiceProxy.Http
 
         public static IServiceProvider ServiceProvider;
 
-        private static ConcurrentDictionary<RemoteFuncType, MethodInfo> _methodInfos = new ConcurrentDictionary<RemoteFuncType, MethodInfo>();
+        //private static ConcurrentDictionary<RemoteFuncType, MethodInfo> _methodInfos = new ConcurrentDictionary<RemoteFuncType, MethodInfo>();
 
         public RestClientProxy()
         {
@@ -23,27 +23,27 @@ namespace Galosoft.IaaS.ServiceProxy.Http
         protected override object Invoke(MethodInfo targetMethod, object[] args)
         {
             var declaringType = targetMethod.DeclaringType;
-            if (!declaringType.HasCustomeAttribute<RestServiceAttribute>(false))
-                throw new InvalidOperationException($"请检查一下约束是否缺少特性{nameof(RestServiceAttribute)}");
+            //if (!declaringType.HasCustomeAttribute<RestControllerAttribute>(false))
+            //    throw new InvalidOperationException($"请检查一下约束是否缺少特性{nameof(RestControllerAttribute)}");
 
             var returnType = targetMethod.ReturnType.BaseType == typeof(Task)
                 ? targetMethod.ReturnType.GetGenericArguments()[0]
                 : targetMethod.ReturnType;
 
-            var remoteSvc = declaringType.GetCustomAttribute<RestServiceAttribute>();
+            //var remoteSvc = declaringType.GetCustomAttribute<RestControllerAttribute>();
             var method = targetMethod.Name;
 
             var requestUri = remoteSvc.ToString(targetMethod.Name);
 
             var funcType = RemoteFuncType.Write;
-            if (targetMethod.HasCustomeAttribute<RestServiceFuncAttribute>(false))
-            {
-                var func = targetMethod.GetCustomAttribute<RestServiceFuncAttribute>(false);
+            //if (targetMethod.HasCustomeAttribute<RestServiceFuncAttribute>(false))
+            //{
+            //    var func = targetMethod.GetCustomAttribute<RestServiceFuncAttribute>(false);
 
-                funcType = func.FuncType;
-                if (!string.IsNullOrWhiteSpace(func.Route))
-                    requestUri = remoteSvc.ToString(func.Route);
-            }
+            //    funcType = func.FuncType;
+            //    if (!string.IsNullOrWhiteSpace(func.Route))
+            //        requestUri = remoteSvc.ToString(func.Route);
+            //}
 
             var genericMi = _methodInfos.GetOrAdd(funcType, funcType =>
               {

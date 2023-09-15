@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 
 namespace Dev.ConsoleApp.RestClients
 {
-    [RestService("posts")]
+    //[RestController("posts")]
     internal interface JsonPlaceholderClient
     {
-        [RestServiceFunc(RemoteFuncType.Read,"/")]
+        //[RestServiceFunc(RemoteFuncType.Read,"/")]
         Task<IEnumerable<Post>> PostsGetAsync();
     }
     internal class Post

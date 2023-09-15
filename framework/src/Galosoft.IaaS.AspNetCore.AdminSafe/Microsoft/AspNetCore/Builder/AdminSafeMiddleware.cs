@@ -42,7 +42,7 @@ namespace Microsoft.AspNetCore.Builder
             if (!canPass)
             {
                 _logger.LogWarning("Forbidden Request from Remote IP address: {RemoteIp}", remoteIp);
-                await context.Response.WriteAsJsonAsync(Result.Fail(ResultCode.Forbidden, "提示：该接口已设置白名单，请联系管理员"));
+                await context.Response.WriteAsJsonAsync(RestResult.Fail(RestResultCode.Forbidden, "提示：该接口已设置白名单，请联系管理员"));
                 return;
             }
             await _next.Invoke(context);

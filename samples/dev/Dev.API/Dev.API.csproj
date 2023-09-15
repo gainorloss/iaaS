@@ -21,6 +21,7 @@
     <ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.OpenTelemetry\Galosoft.IaaS.OpenTelemetry.csproj" />
     <ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.Redis\Galosoft.IaaS.Redis.csproj" />
     <ProjectReference Include="..\Dev.Application\Dev.Application.csproj" />
+    <ProjectReference Include="..\UserCenter.Application\UserCenter.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

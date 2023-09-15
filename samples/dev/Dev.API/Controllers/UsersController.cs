@@ -31,12 +31,12 @@ public class UsersController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet]
-    public async Task<Result> AllAsync()
+    public async Task<RestResult> AllAsync()
     {
         var cnn = _ctx.Database.GetDbConnection();
         var users = await cnn.QueryAsync(@"SELECT *
 from uc.uc_users uu ");
 
-        return Result.Succeed(users);
+        return RestResult.Succeed(users);
     }
 }

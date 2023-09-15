@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Galosoft.IaaS.Core
 {
-    public class PagedResultDto<T>
+    public class PagedResponse<T>
     {
-        public PagedResultDto(IEnumerable<T> items, int total)
+        public PagedResponse(IEnumerable<T> items, int total)
         {
             Items = items;
             Total = total;

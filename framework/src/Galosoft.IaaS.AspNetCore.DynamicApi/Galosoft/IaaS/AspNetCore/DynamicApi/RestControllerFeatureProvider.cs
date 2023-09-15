@@ -1,5 +1,4 @@
-﻿using Galosoft.IaaS.Core;
-using Microsoft.AspNetCore.Mvc.Controllers;
+﻿using Microsoft.AspNetCore.Mvc.Controllers;
 using System;
 using System.Diagnostics;
 using System.Linq;
@@ -19,7 +18,7 @@ namespace Galosoft.IaaS.AspNetCore.DynamicApi
             if (!typeInfo.IsClass || typeInfo.IsAbstract || !typeInfo.Name.EndsWith("Service"))
                 return false;
 
-            var @is = typeInfo.GetInterfaces().SelectMany(i => i.GetCustomAttributes<RestServiceAttribute>(true)).Concat(typeInfo.GetCustomAttributes<RestServiceAttribute>(true));
+            var @is = typeInfo.GetInterfaces().SelectMany(i => i.GetCustomAttributes<RestControllerAttribute>(true)).Concat(typeInfo.GetCustomAttributes<RestControllerAttribute>(true));
             return @is.Any();
         }
     }

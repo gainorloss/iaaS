@@ -1,6 +1,6 @@
 ﻿namespace Galosoft.IaaS.Core
 {
-    public class PagedRequestDto<T>
+    public class PagedRequest<T>
         : PagedRequestDto
     {
         public T? Condition { get; set; }

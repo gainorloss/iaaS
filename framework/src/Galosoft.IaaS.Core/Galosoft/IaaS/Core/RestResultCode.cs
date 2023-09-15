@@ -3,7 +3,7 @@
     /// <summary>
     /// 服务层响应码枚举
     /// </summary>
-    public enum ResultCode
+    public enum RestResultCode
     {
         /// <summary>
         /// 成功

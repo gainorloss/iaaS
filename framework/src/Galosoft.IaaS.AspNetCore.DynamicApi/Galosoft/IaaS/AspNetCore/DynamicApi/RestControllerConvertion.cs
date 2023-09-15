@@ -1,5 +1,4 @@
-﻿using Galosoft.IaaS.Core;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -19,24 +18,26 @@ namespace Galosoft.IaaS.AspNetCore.DynamicApi
             foreach (var controller in application.Controllers)
             {
                 // 获取RestControllerAttribute
-                //var remoteSvc = controller.Attributes.FirstOrDefault(attr => attr.GetType() == typeof(RestClientAttribute)) as RestClientAttribute;
-                var @is = controller.ControllerType.GetInterfaces();
-                var remoteSvc = @is.SelectMany(i => i.GetCustomAttributes<RestServiceAttribute>(true)).Concat(controller.ControllerType.GetCustomAttributes<RestServiceAttribute>(true))
-                    .FirstOrDefault();
-                if (remoteSvc == null)
+                var restController = controller.Attributes.FirstOrDefault(attr => attr.GetType() == typeof(RestControllerAttribute)) as RestControllerAttribute;
+                if (restController == null)
                     continue;
 
                 if (string.IsNullOrWhiteSpace(controller.ControllerName))
                     continue;
 
-                controller.ControllerName = remoteSvc.Route;
+                var controllerName = controller.ControllerName;
+                foreach (var controllerPostfix in restController.ControllerPostfixes)
+                    controllerName = controllerName.Replace(controllerPostfix, string.Empty);
+                controller.ControllerName = controllerName;
 
                 if (string.IsNullOrWhiteSpace(controller.ApiExplorer.GroupName))
-                    controller.ApiExplorer.GroupName = controller.ControllerName;
+                    controller.ApiExplorer.GroupName = controllerName;
 
                 if (controller.ApiExplorer.IsVisible == null)
                     controller.ApiExplorer.IsVisible = true;
 
+                var actionName = string.Empty;
+                var routes = new List<string>();
                 var selectorModel = new SelectorModel();
                 var attributeRouteModel = new AttributeRouteModel();
                 foreach (var action in controller.Actions)
@@ -44,40 +45,24 @@ namespace Galosoft.IaaS.AspNetCore.DynamicApi
                     if (string.IsNullOrWhiteSpace(action.ActionName))
                         continue;
 
+                    actionName = action.ActionName;
+                    foreach (var postfix in restController.ActionPostfixes)
+                        actionName = actionName.Replace(postfix, string.Empty);
+
+                    action.ActionName = actionName;
 
                     if (action.ApiExplorer.IsVisible == null)
                         action.ApiExplorer.IsVisible = true;
 
+                    routes.Add(restController.Scene);
+                    routes.Add(controllerName.ToLowerInvariant());
+                    routes.Add(actionName.ToLowerInvariant());
 
-                    attributeRouteModel.Template = remoteSvc.ToString();
-
-                    var httpMethod = "POST";
-                    var args = action.Parameters.Select(p => p.ParameterType).ToArray();
-
-                    var funcs = new List<RestServiceFuncAttribute>();
-                    foreach (var i in @is)
-                    {
-                        var method = i.GetMethod(action.ActionMethod.Name, args);
-                        if (method == null)
-                            continue;
-                        var attrs = method.GetCustomAttributes<RestServiceFuncAttribute>();
-                        if (attrs == null || !attrs.Any())
-                            continue;
-                        funcs.AddRange(attrs);
-                    }
-
-                    var remoteFunc = funcs.FirstOrDefault();
-
-                    if (remoteFunc != null && remoteFunc.FuncType == RemoteFuncType.Read)
-                    {
-                        action.ActionName = remoteFunc.Route;
-                        httpMethod = "GET";
-                    }
-
+                    attributeRouteModel.Template = $"{string.Join(restController.Separator, routes)}/{restController.Version}";
                     if (!action.Selectors.Any())
                     {
                         selectorModel.AttributeRouteModel = attributeRouteModel;
-                        selectorModel.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { httpMethod }));
+                        selectorModel.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { "get" }));
                         action.Selectors.Add(selectorModel);
                     }
                     else
@@ -85,7 +70,7 @@ namespace Galosoft.IaaS.AspNetCore.DynamicApi
                         foreach (var selector in action.Selectors)
                         {
                             if (!selector.ActionConstraints.Any())
-                                selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { httpMethod }));
+                                selector.ActionConstraints.Add(new HttpMethodActionConstraint(new[] { "get" }));
 
                             selector.AttributeRouteModel = AttributeRouteModel.CombineAttributeRouteModel(selector.AttributeRouteModel, attributeRouteModel);
                         }
@@ -102,6 +87,7 @@ namespace Galosoft.IaaS.AspNetCore.DynamicApi
                             parameter.BindingInfo = BindingInfo.GetBindingInfo(new[] { new FromQueryAttribute() });
                     }
 
+                    routes.Clear();
                 }
             }
         }

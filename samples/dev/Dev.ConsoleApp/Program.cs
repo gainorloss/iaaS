@@ -50,10 +50,10 @@ namespace Dev.ConsoleApp
 
             services.AddRabbitMQ();//新增：配置合并提取 galo@2022-4-25 16:29:56
 
-            services.AddRestClient("https://jsonplaceholder.typicode.com/", builder =>
-            {
-                //builder.AddHeaderPropagation(opt => opt.Headers.Add("X-TraceId"));
-            });
+            //services.AddRestClient("https://jsonplaceholder.typicode.com/", builder =>
+            //{
+            //    //builder.AddHeaderPropagation(opt => opt.Headers.Add("X-TraceId"));
+            //});
             services.AddSingleton<IPerformanceTester, PerformanceTester>();
             services.AddHostedService<Bootstrapper>();
 

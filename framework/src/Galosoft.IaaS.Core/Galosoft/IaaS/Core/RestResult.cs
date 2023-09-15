@@ -5,11 +5,11 @@ namespace Galosoft.IaaS.Core
     /// <summary>
     /// 服务层响应实体(泛型)
     /// </summary>
-    public class Result<T>
+    public class RestResult<T>
     {
-        public Result() { }
-        public Result(
-            ResultCode code,
+        public RestResult() { }
+        public RestResult(
+            RestResultCode code,
             string msg = default,
             T result = default)
         {
@@ -22,7 +22,7 @@ namespace Galosoft.IaaS.Core
         /// <summary>
         /// 响应码
         /// </summary>
-        public ResultCode Code { get; set; }
+        public RestResultCode Code { get; set; }
 
         /// <summary>
         /// 响应信息
@@ -39,9 +39,9 @@ namespace Galosoft.IaaS.Core
         /// <summary>
         /// 成功
         /// </summary>
-        public bool Success => Code == ResultCode.Ok;
+        public bool Success => Code == RestResultCode.Ok;
 
-        public virtual Result<T> WithTraceId(string traceId)
+        public virtual RestResult<T> WithTraceId(string traceId)
         {
             TraceId = traceId;
             return this;
@@ -54,10 +54,10 @@ namespace Galosoft.IaaS.Core
     /// 服务层响应实体
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Result : Result<object>
+    public class RestResult : RestResult<object>
     {
-        public Result(
-            ResultCode code,
+        public RestResult(
+            RestResultCode code,
             string msg = null,
             object result = null)
             : base(
@@ -72,20 +72,21 @@ namespace Galosoft.IaaS.Core
         /// <param name="message"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static Result Succeed(object data, string msg = "操作成功")
+        public static RestResult Succeed(object? data = null, string msg = "操作成功")
         {
-            return new Result(ResultCode.Ok, msg, data!);
+            return new RestResult(RestResultCode.Ok, msg, data!);
         }
 
         /// <summary>
         /// 响应失败
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="resultCode"></param>
+        /// <param name="msg"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static Result Fail(ResultCode resultCode, string msg = "操作失败", object data = default)
+        public static RestResult Fail(RestResultCode resultCode= RestResultCode.Error, string msg = "操作失败", object? data = default)
         {
-            return new Result(resultCode, msg, data);
+            return new RestResult(resultCode, msg, data);
         }
 
         /// <summary>
@@ -94,9 +95,9 @@ namespace Galosoft.IaaS.Core
         /// <param name="exexception></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static Result Fail(ResultCode resultCode, Exception exception)
+        public static RestResult Fail(RestResultCode resultCode, Exception exception)
         {
-            return new Result(resultCode, $"{exception.Message},{exception.StackTrace},{exception.InnerException?.Message},{exception.InnerException?.StackTrace}");
+            return new RestResult(resultCode, $"{exception.Message},{exception.StackTrace},{exception.InnerException?.Message},{exception.InnerException?.StackTrace}");
         }
     }
 }

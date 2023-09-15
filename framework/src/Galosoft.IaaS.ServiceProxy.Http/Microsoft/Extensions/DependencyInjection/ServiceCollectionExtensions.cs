@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             RestClientProxy.ServiceProvider = services.BuildServiceProvider();
 
-            var types = DependencyContext.Default.GetTypes(type => type.IsInterface && type.HasCustomeAttribute<RestServiceAttribute>(false));
+            var types = DependencyContext.Default.GetTypes(type => type.IsInterface && type.HasCustomeAttribute<RestControllerAttribute>(false));
 
             foreach (var type in types)
             {

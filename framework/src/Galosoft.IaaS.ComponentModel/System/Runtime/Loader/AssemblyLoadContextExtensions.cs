@@ -20,9 +20,7 @@ namespace Microsoft.Extensions.DependencyModel
         public static IEnumerable<Type> GetTypes(this DependencyContext dependencyConext, Func<Type, bool> typesFilter)
         {
             var dir = AppContext.BaseDirectory;
-            return dependencyConext.RuntimeLibraries.Where(lib => lib.Type.Equals("project"))
-                .Select(lib => Assembly.LoadFrom(Path.Combine(dir, $"{lib.Name}.dll")))
-                .SelectMany(ass => ass.GetTypes())
+            return GetRuntimeAssemblies(dependencyConext).SelectMany(ass => ass.GetTypes())
                 .Where(typesFilter);
         }
 
@@ -34,6 +32,19 @@ namespace Microsoft.Extensions.DependencyModel
         public static IEnumerable<Type> GetClassTypes(this DependencyContext dependencyConext)
         {
             return GetTypes(dependencyConext, t => t.IsClass && !t.IsAbstract && !t.IsGenericType);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dependencyConext"></param>
+        /// <returns></returns>
+        public static IEnumerable<Assembly> GetRuntimeAssemblies(this DependencyContext dependencyConext)
+        {
+            var dir = AppContext.BaseDirectory;
+            return dependencyConext.RuntimeLibraries.Where(lib => lib.Type.Equals("project"))
+                .Select(lib => Assembly.LoadFrom(Path.Combine(dir, $"{lib.Name}.dll")));
         }
     }
 }
