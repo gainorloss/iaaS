@@ -43,7 +43,8 @@ namespace Dev.API
             //{
             //    typeof(DevAppService).Assembly,
             //})
-                .ConfigureApiBehaviorOptions(o => o.SuppressModelStateInvalidFilter = true);
+                //.ConfigureApiBehaviorOptions(o => o.SuppressModelStateInvalidFilter = true)
+                ;
 
             //Jwt bearer
             services.AddJwtBearerAuthentication(Configuration.GetSection("Jwt"));

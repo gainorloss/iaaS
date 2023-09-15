@@ -86,7 +86,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Galosoft.IaaS.Wpf", "framew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dev.Core", "samples\dev\Dev.Core\Dev.Core.csproj", "{1C62EC0B-FD45-4B65-9DCA-FCCC1C271D7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Galosoft.IaaS.OpenTelemetry", "framework\src\Galosoft.IaaS.OpenTelemetry\Galosoft.IaaS.OpenTelemetry.csproj", "{D94247C6-E51A-408E-9606-971AD00EF730}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Galosoft.IaaS.OpenTelemetry", "framework\src\Galosoft.IaaS.OpenTelemetry\Galosoft.IaaS.OpenTelemetry.csproj", "{D94247C6-E51A-408E-9606-971AD00EF730}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
