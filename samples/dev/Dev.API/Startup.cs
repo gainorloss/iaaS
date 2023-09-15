@@ -59,8 +59,8 @@ namespace Dev.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwaggerGen();
             }
+            app.UseSwaggerGen();
 
             app.UseCors(builder => builder
             .WithOrigins("http://localhost:3000", "http://localhost:7000", "http://localhost:7002")

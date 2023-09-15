@@ -11,7 +11,7 @@ namespace Sample.API;
 /// <summary>
 /// 
 /// </summary>
-[ApiController,AllowAnonymous]
+[ApiController]
 [Route("/api/[controller]/[action]")]
 public class UsersController : ControllerBase
 {
