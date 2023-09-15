@@ -1,7 +1,7 @@
 version: '3'
 services:
-  sample.api:
-    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.09.4
+  dev.api:
+    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.15.1
     build:
         context: .
         dockerfile: ./Dockerfile

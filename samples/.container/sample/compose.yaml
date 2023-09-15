@@ -8,7 +8,7 @@ x-common: &common
 version: '3'
 services:
   sample.api-dev:
-    image: registry.cn-shanghai.aliyuncs.com/galosoft/sample.api:2023.09.09.4
+    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.15.1
     ports:
       - 7001:80
     environment: &sample-api-env
@@ -17,7 +17,7 @@ services:
       replicas: 1
     <<: *common
   sample.api:
-    image: registry.cn-shanghai.aliyuncs.com/galosoft/sample.api:2023.09.09.4
+    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.15.1
     environment: *sample-api-env
     deploy:
       replicas: 3
