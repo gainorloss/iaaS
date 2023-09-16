@@ -63,6 +63,7 @@ namespace Dev.API
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapPrometheusScrapingEndpoint();
                 endpoints.MapEnvironments();
                 endpoints.MapGet("/", async context =>
                 {
