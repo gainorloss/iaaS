@@ -6,18 +6,12 @@ import {
   QuestionCircleFilled,
   GithubFilled
 } from '@ant-design/icons';
-import { StyleProvider, legacyLogicalPropertiesTransformer, px2remTransformer } from '@ant-design/cssinjs';
-import { ConfigProvider, theme, Input } from 'antd';
+import { theme, Input } from 'antd';
 
 import { Outlet, useNavigate, useNavigation } from 'react-router-dom';
-import logo from './logo.svg';
-import zhCN from 'antd/locale/zh_CN';
+import logo from '@/logo.svg';
 import { ProLayout, MenuDataItem, SettingDrawer, ProSettings, PageContainer } from '@ant-design/pro-components';
-import { menus } from '../../config/menus';
-const px2rem = px2remTransformer({
-  // rootValue: 19, // 32px = 1rem; @default 16
-  mediaQuery: true
-});
+import { menus } from '@/config/menus';
 
 const loopMenuItem = (menus: any[]): MenuDataItem[] =>
   menus.map(({ title, key, children }) => ({
@@ -35,19 +29,8 @@ const Layout: React.FC = () => {
   const navigate = useNavigate();
   console.log(process.env);
 
-  return (<ConfigProvider locale={zhCN}
-    theme={{
-      token: {
-        // Seed Token，影响范围大
-        // colorPrimary: '#00b96b',
-        // borderRadius: 2,
-
-        // 派生变量，影响范围小
-        // colorBgContainer: '#f6ffed',
-      },
-    }}
-  >
-    <StyleProvider hashPriority="high" transformers={[legacyLogicalPropertiesTransformer, px2rem]}>
+  return (
+    <>
       <ProLayout
         title={process.env.REACT_APP_NAME}
         logo={logo}
@@ -152,8 +135,7 @@ const Layout: React.FC = () => {
         }}
         disableUrlParams={false}
       />
-    </StyleProvider>
-  </ConfigProvider >
+    </>
   )
 };
 export default Layout;

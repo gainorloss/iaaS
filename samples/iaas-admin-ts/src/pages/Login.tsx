@@ -10,8 +10,9 @@ import {
     UserOutlined,
     WeiboCircleOutlined, WeiboOutlined
 } from '@ant-design/icons';
-import { CSSProperties, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import request from "@/utils/request";
 
 type LoginType = 'phone' | 'account';
 
@@ -22,7 +23,7 @@ const iconStyles: CSSProperties = {
     cursor: 'pointer',
 };
 export default function Login() {
-    const [loginType, setLoginType] = useState<LoginType>('phone');
+    const [loginType, setLoginType] = useState<LoginType>('account');
     const navigate = useNavigate();
     return (
         <div
@@ -67,6 +68,11 @@ export default function Login() {
                         }, 20);
                     });
                     console.log(values);
+                    const res = await request({ url: '/api/oauth/auth', method: 'get' });
+                    if (res.code == 200 && res.data) {
+                        localStorage.setItem('access_token', res.data.access_token);
+                        localStorage.setItem('refresh_token', res.data.refresh_token);
+                    }
                     navigate('/');
                 }}
                 actions={

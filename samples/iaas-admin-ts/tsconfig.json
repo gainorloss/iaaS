@@ -18,7 +18,13 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "paths": {
+      // 注意哦，是 "@/*" 后面的 "/*" 不能少
+        "@/*": [
+            "./src/*"
+        ]
+    }
   },
   "include": [
     "src"

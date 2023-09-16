@@ -1,8 +1,11 @@
 import { PageContainer } from "@ant-design/pro-components";
-import { Space } from "antd";
+import { Button, App } from "antd";
+
 
 export default function Product() {
-    return <PageContainer content="SPU" loading>
+    const { message } = App.useApp();
+    return <PageContainer content="SPU" >
         product
+        <Button onClick={() => { message.success("info") }}>message.info</Button>
     </PageContainer>;
 }
