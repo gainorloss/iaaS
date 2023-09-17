@@ -34,7 +34,7 @@ services:
       - NODE_ENV=production
     <<: *common
   jaeger:
-    image: jaegertracing/all-in-one:1.49
+    image: quay.io/jaegertracing/all-in-one:1.49
     ports:
       # - 6831:6831/udp
       # - 6832:6832/udp
@@ -51,12 +51,6 @@ services:
       - COLLECTOR_ZIPKIN_HOST_PORT=:9411
     networks:
       - sample
-  zipkin:
-    image: openzipkin/zipkin:latest
-    ports:
-      - 9411:9411
-    networks:
-      - sample 
 networks:
   sample:
    driver: bridge
