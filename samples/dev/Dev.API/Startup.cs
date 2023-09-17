@@ -36,7 +36,7 @@ namespace Dev.API
             //Jwt bearer
             services.AddJwtBearerAuthentication(Configuration.GetSection("Jwt"));
             services.AddDbContext<AdminDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
-            services.AddOpenTelemetryObservability(Configuration, $"{Environment.ApplicationName}.{Environment.EnvironmentName}");
+            services.AddOpenTelemetryObservability(Configuration, Environment.GetApplicationContext());
 
         }
 

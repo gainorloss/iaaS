@@ -4,11 +4,10 @@ x-common: &common
   networks: 
     - sample
   
-
 version: '3'
 services:
   sample.api-dev:
-    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.16.2
+    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.17.5
     ports:
       - 7001:80
     environment: &sample-api-env
@@ -17,10 +16,10 @@ services:
       replicas: 1
     <<: *common
   sample.api:
-    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.16.2
+    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.17.5
     environment: *sample-api-env
     deploy:
-      replicas: 3
+      replicas: 2
       update_config:
         order: start-first
     <<: *common
@@ -34,25 +33,18 @@ services:
     environment:
       - NODE_ENV=production
     <<: *common
-  prometheus:
-    image: quay.io/prometheus/prometheus:v2.47.0
-    ports:
-      - 9090:9090
-    volumes:
-      - ./prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus/data:/prometheus
   jaeger:
     image: jaegertracing/all-in-one:1.49
     ports:
-      - 6831:6831/udp
-      - 6832:6832/udp
-      - 5778:5778 
+      # - 6831:6831/udp
+      # - 6832:6832/udp
+      # - 5778:5778 
       - 16686:16686
       - 4317:4317
       - 4318:4318
-      - 14250:14250
-      - 14268:14268
-      - 14269:14269
+      # - 14250:14250
+      # - 14268:14268
+      # - 14269:14269
       # - 9411:9411
     environment:
       - COLLECTOR_OTLP_ENABLED=true
@@ -64,7 +56,7 @@ services:
     ports:
       - 9411:9411
     networks:
-      - sample  
+      - sample 
 networks:
   sample:
    driver: bridge
