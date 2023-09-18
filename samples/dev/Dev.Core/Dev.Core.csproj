@@ -16,7 +16,6 @@
 		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.EntityFrameworkCore\Galosoft.IaaS.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.RabbitMQ\Galosoft.IaaS.RabbitMQ.csproj" />
 		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.Redis\Galosoft.IaaS.Redis.csproj" />
-		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.ServiceProxy.Http\Galosoft.IaaS.ServiceProxy.Http.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\src\Galosoft.IaaS.AspNetCore.DynamicApi\Galosoft.IaaS.AspNetCore.DynamicApi.csproj" />
+		<ProjectReference Include="..\Dev.Application.Contracts\Dev.Application.Contracts.csproj" />
+		<ProjectReference Include="..\Dev.Core\Dev.Core.csproj" />
+	</ItemGroup>
+
+</Project>

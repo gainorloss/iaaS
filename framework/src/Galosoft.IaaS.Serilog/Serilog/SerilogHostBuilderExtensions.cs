@@ -17,6 +17,11 @@ namespace Serilog
                     .WriteTo.Async(sink => sink.File("logs/logs.log", rollingInterval: RollingInterval.Day, outputTemplate: "{Timestamp:HH:mm:ss.fff zzz} || {Level} || {SourceContext:l} || {Message} || {Exception} ||end {NewLine}"))
                     .WriteTo.Async(sink => sink.Trace());
 
+                var otlpEndpoint = hosting.Configuration["OpenTelemetry:OTLP_ENDPOINT_URL"];
+
+                if (!string.IsNullOrEmpty(otlpEndpoint))
+                    loggerConfig.WriteTo.OpenTelemetry(otlpEndpoint);
+
                 if (env.IsDevelopment())
                 {
                     loggerConfig.WriteTo.Async(sink => sink.Console())

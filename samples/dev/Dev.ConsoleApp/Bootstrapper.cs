@@ -59,7 +59,7 @@ namespace Dev.ConsoleApp
             INacosConfigService nacosConfig,
             RedisCodeGenerator codeGenerator,
             ILogger<Bootstrapper> logger,
-            JsonPlaceholderClient jsonPlaceholderClient,
+            //JsonPlaceholderClient jsonPlaceholderClient,
             IConnectionFactory connectionFactory,
             IComponentSvc component,
             DynamicProxyGenerator proxyGenerator,
@@ -73,7 +73,7 @@ namespace Dev.ConsoleApp
             _nacosConfig = nacosConfig;
             _codeGenerator = codeGenerator;
             _logger = logger;
-            _jsonPlaceholderClient = jsonPlaceholderClient;
+            //_jsonPlaceholderClient = jsonPlaceholderClient;
             _factory = connectionFactory;
             _component = component;
             _proxyGenerator = proxyGenerator;

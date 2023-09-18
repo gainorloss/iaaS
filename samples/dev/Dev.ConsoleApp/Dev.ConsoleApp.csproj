@@ -16,7 +16,6 @@
 		<PackageReference Include="casbin.net" Version="1.13.0" />
 		<PackageReference Include="emitmapper.core" Version="1.0.2" />
 		<PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="5.0.11" />
-		<PackageReference Include="microsoft.extensions.dependencyinjection" Version="6.0.0" />
 		<PackageReference Include="microsoft.extensions.http.polly" Version="6.0.0" />
 		<PackageReference Include="nacos-sdk-csharp" Version="1.3.4" />
 		<PackageReference Include="system.text.json" Version="6.0.5" />

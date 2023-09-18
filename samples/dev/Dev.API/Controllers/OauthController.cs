@@ -24,9 +24,13 @@ namespace Dev.API.Controllers
             _jwt = jwt;
         }
 
+        /// <summary>
+        /// 获取授权
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous,HttpGet]
         [RT]
-        public Result Auth()
+        public RestResult Auth()
         {
             var identity = new ClaimsIdentity(new Claim[]
               {
@@ -35,14 +39,18 @@ namespace Dev.API.Controllers
               });
 
             var token = _jwt.GenerateToken(identity);
-            return Result.Succeed(token);
+            return RestResult.Succeed(token);
         }
 
+        /// <summary>
+        /// 访客
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        public Result Profile()
+        public RestResult Profile()
         {
             var claims = HttpContext.User.Claims.ToDictionary(c => c.Type, c => c.Value);
-            return Result.Succeed(claims);
+            return RestResult.Succeed(claims);
         }
     }
 }

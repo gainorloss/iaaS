@@ -1,0 +1,10 @@
+services:
+  iaas-admin-ts:
+    image: registry.cn-shanghai.aliyuncs.com/galosoft/iaas-admin-ts:2023.09.16.1
+    build:
+      context: .
+      dockerfile: ../dockerfile
+      # tags:
+      #   - "quary.io/iaas-admin-ts:2023.08.27.4"
+      #   - "docker.io/iaas-admin-ts:2023.08.27.4"
+        # - "registry.ebs.jsbooks.com.cn/pebs/pebs.net6.2022/iaas-admin-ts:test.2"

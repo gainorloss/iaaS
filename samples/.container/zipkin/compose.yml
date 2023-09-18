@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  zipkin:
+    image: openzipkin/zipkin:latest
+    ports:
+      - 9411:9411
+    networks:
+      - zipkin
+networks:
+  zipkin:
+    driver: bridge

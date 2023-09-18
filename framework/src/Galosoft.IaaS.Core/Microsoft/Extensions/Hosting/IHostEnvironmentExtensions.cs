@@ -4,7 +4,7 @@ namespace Microsoft.Extensions.Hosting
     {
         public static string GetApplicationContext(this IHostEnvironment env)
         {
-            return $"{env.ApplicationName}[{env.EnvironmentName}]";
+            return $"{env.ApplicationName}.{env.EnvironmentName}";
         }
     }
 }
