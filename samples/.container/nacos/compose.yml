@@ -1,0 +1,16 @@
+version: '3.8'
+services:
+  nacos-server:
+    image: nacos/nacos-server
+    ports:
+      - 8848:8848
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+    volumes:
+      - ./config/application.properties:/conf/application.properties
+    networks:
+      - nacos
+networks:
+  nacos:
+    driver: bridge

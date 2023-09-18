@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  rabbitmq: 
+    image: rabbitmq:management
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=W%PL5@bgc3oBr&&%oaE6zow1h6#20Q
+    ports:
+      - 5671:5671
+      - 5672:5672
+      - 4369:4369
+      - 15671:15671
+      - 15672:15672
+      - 25672:25672
+    restart: always
+    networks:
+      - rabbitmq
+networks:
+  rabbitmq:
+    driver: bridge
+volumes:
+  rabbitmq-data:

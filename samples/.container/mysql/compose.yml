@@ -18,6 +18,6 @@ services:
       MYSQL_ROOT_PASSWORD: jY0#R599#%17#&5g^^B!zT$#9g0A0Z
     volumes:
       # 挂载数据目录
-      - "./data:/var/lib/mysql" 
+      - "mysql-data:/var/lib/mysql" 
       # 挂载配置文件目录
       - "./config:/etc/mysql/conf.d"   
