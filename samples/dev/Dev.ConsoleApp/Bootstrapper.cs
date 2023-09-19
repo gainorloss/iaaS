@@ -19,8 +19,10 @@ using Microsoft.Extensions.Logging;
 using Nacos.V2;
 using NetCasbin;
 using Newtonsoft.Json;
+using Org.Apache.Rocketmq;
 using RabbitMQ.Client;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -97,7 +99,29 @@ namespace Dev.ConsoleApp
             //ToolGoodWordsTest();
             //await AngleSharpTestAsync();
             //ServiceCollectionTest();
+            await RmqTestAsync();
         }
+
+        private async Task RmqTestAsync()
+        {
+            //AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            var clientConfig = new ClientConfig.Builder()
+                  .SetEndpoints("localhost:10081")
+                  .EnableSsl(false)
+                  .Build();
+
+           var consumer = await new SimpleConsumer.Builder()
+                  .SetClientConfig(clientConfig)
+                  .SetAwaitDuration(TimeSpan.FromSeconds(15))
+                  .SetConsumerGroup("oc_order_created")
+                  .SetSubscriptionExpression(new Dictionary<string, FilterExpression> { { "oc_test", new FilterExpression("*") } })
+                  .Build();
+            while (true)
+            {
+                var mvs = await consumer.Receive(16, TimeSpan.FromSeconds(15));
+            }
+        }
+
         private void ServiceCollectionTest()
         {
             //using (var scope = _scopeFactory.CreateScope())

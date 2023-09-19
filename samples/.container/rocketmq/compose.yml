@@ -1,30 +1,38 @@
 version: '3.8'
 services:
   namesrv: 
-    image: apache/rocketmq
+    image: apache/rocketmq:5.1.0
     command:  ./mqnamesrv
     restart: always
+    privileged: true
     ports:
       - 9876:9876
     networks:
       - rocketmq
   broker:
-    image: apache/rocketmq
-    command:  ./mqbroker -n namesrv:9876
+    image: apache/rocketmq:5.1.0
+    command:  ./mqbroker -n namesrv:9876 -c /home/rocketmq/broker.conf  --enable-proxy
+    # command:  ./mqbroker -n namesrv:9876
+    privileged: true
     ports:
+      - 10081:8081
+      - 10912:10912
       - 10911:10911
       - 10909:10909
     volumes:
       - broker-store:/home/rocketmq/store
+      - ./config/broker.conf:/home/rocketmq/broker.conf
+    environment:
+      - NAMESRV_ADDR=namesrv:9876
     networks:
       - rocketmq
   console:
-    image: pangliang/rocketmq-console-ng
+    image: apacherocketmq/rocketmq-dashboard
+    privileged: true
     ports:
       - 9999:8080
     environment:
-      # - JAVA_OPTS=-Drocketmq.namesrv.addr=namesrv:9876-Dcom.rocketmq.sendMessageWithVIPChannel=false
-      - JAVA_OPTS=-Drocketmq.namesrv.addr=namesrv:9876
+      - JAVA_OPTS=-Drocketmq.namesrv.addr=namesrv:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false
     networks:
       - rocketmq
 networks:
