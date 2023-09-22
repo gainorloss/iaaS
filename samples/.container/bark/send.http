@@ -1,0 +1,21 @@
+GET /ping HTTP/1.1
+Host: localhost:8000
+
+HTTP/1.1 200  - OK
+server: Bark
+date: Fri, 22 Sep 2023 14:51:28 GMT
+content-type: application/json
+content-length: 52
+connection: close
+###
+@sendKey=AwUokNDrvBWBQanFWZdn7k
+@sendKey_=YxrYNeFRgpdNycRepjaZAM
+GET /{{sendKey_}}/我最最最亲爱的老婆/我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容
+Host: localhost:8000
+
+HTTP/1.1 400  - Bad Request
+server: Bark
+date: Fri, 22 Sep 2023 14:51:46 GMT
+content-type: application/json
+content-length: 141
+connection: close
