@@ -7,11 +7,12 @@ date: Fri, 22 Sep 2023 14:51:28 GMT
 content-type: application/json
 content-length: 52
 connection: close
-###
+
+
 @sendKey=AwUokNDrvBWBQanFWZdn7k
 @sendKey_=YxrYNeFRgpdNycRepjaZAM
 GET /{{sendKey_}}/我最最最亲爱的老婆/我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容我是内容
-Host: localhost:8000
+Host: api.day.app
 
 HTTP/1.1 400  - Bad Request
 server: Bark
@@ -19,3 +20,9 @@ date: Fri, 22 Sep 2023 14:51:46 GMT
 content-type: application/json
 content-length: 141
 connection: close
+
+GET /YxrYNeFRgpdNycRepjaZAM/验证码是9527?automaticallyCopy=1&copy=9527 
+Host: api.day.app
+
+GET /YxrYNeFRgpdNycRepjaZAM/百度网址?url=https://www.baidu.com 
+Host: api.day.app
