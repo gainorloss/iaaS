@@ -45,8 +45,6 @@ namespace Dev.ConsoleApp
 
         private static void ConfigureServices(HostBuilderContext ctx, IServiceCollection services)
         {
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2Support", true);
             services.AddRedisClient(ctx.Configuration);
             services.AddNacosV2Config(ctx.Configuration);
 

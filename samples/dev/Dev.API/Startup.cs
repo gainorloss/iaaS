@@ -1,5 +1,6 @@
 using Dev.Application;
 using Dev.ConsoleApp.Entities;
+using Galosoft.IaaS.Core;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,16 +10,31 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Nacos.AspNetCore.V2;
 using Nacos.V2;
+using Nacos.V2.DependencyInjection;
 using Serilog;
+using System.Collections.Generic;
 
 namespace Dev.API
 {
     public class Startup
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public IConfiguration Configuration { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
         public IHostEnvironment Environment { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="environment"></param>
         public Startup(IConfiguration configuration, IHostEnvironment environment)
         {
             Configuration = configuration;
@@ -28,8 +44,8 @@ namespace Dev.API
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddNacosV2Config(Configuration);
-            //services.AddNacosAspNet(Configuration);
+            services.AddNacosV2Config(Configuration);
+            services.AddNacosAspNet(Configuration);
             services.AddSwaggerGen("²âÊÔAPI");
             services.AddRestControllers();
 
@@ -65,29 +81,7 @@ namespace Dev.API
             {
                 endpoints.MapPrometheusScrapingEndpoint();
                 endpoints.MapEnvironments();
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
-
-                endpoints.MapGet("/appsettings", async context =>
-                {
-                    var nacosConfig = context.RequestServices.GetRequiredService<INacosConfigService>();
-                    var appsettings = await nacosConfig.GetConfig("appsettings.json", "DEFAULT_GROUP", 3000);
-                    await context.Response.WriteAsync(appsettings);
-                });
-                endpoints.MapGet("/config", async context =>
-                {
-                    var cn = Configuration.GetConnectionString("Default");
-                    var logLvl = Configuration.GetValue<string>("Logging:LogLevel:Default");
-                    await context.Response.WriteAsync($"ConnectionStrings:Default=\t{cn}\nLogging:LogLevel:Default=\t{logLvl}");
-                });
-                endpoints.MapGet("/svc", async context =>
-                {
-                    var nacosNaming = context.RequestServices.GetRequiredService<INacosNamingService>();
-                    var instance = await nacosNaming.SelectOneHealthyInstance("Dev.API");
-                    await context.Response.WriteAsync($"Dev.API:\t{(instance.Metadata.TryGetValue("secure", out _) ? "https" : "http")}://{instance.Ip}:{instance.Port}");
-                });
+                endpoints.MapNacos();//nacos
                 endpoints.MapControllers().RequireAuthorization();
             });
         }

@@ -1,12 +1,19 @@
 version: '3.8'
 services:
   nacos-server:
-    image: nacos/nacos-server
+    image: nacos/nacos-server:v2.1.3
     ports:
       - 8848:8848
+      - 9848:9848
+      - 9849:9849
     environment:
       - PREFER_HOST_MODE=hostname
       - MODE=standalone
+      - db_pool_config_connetionTimeout=60000
+      - NACOS_AUTH_ENABLE=true
+      - NACOS_AUTH_TOKEN=SecretKey012345678901234567890123456789012345678901234567890123456789
+      - NACOS_AUTH_IDENTITY_KEY=serverIdentity
+      - NACOS_AUTH_IDENTITY_VALUE=security
     volumes:
       - ./config/application.properties:/conf/application.properties
     networks:
