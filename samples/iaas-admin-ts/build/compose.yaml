@@ -1,6 +1,6 @@
 services:
   iaas-admin-ts:
-    image: registry.cn-shanghai.aliyuncs.com/galosoft/iaas-admin-ts:2023.09.24.1
+    image: registry.cn-shanghai.aliyuncs.com/galosoft/iaas-admin-ts:2023.09.24.2
     build:
       context: .
       dockerfile: ../dockerfile
