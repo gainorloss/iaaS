@@ -11,7 +11,7 @@ import {
     WeiboCircleOutlined, WeiboOutlined
 } from '@ant-design/icons';
 import { CSSProperties, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import request from "@/utils/request";
 
 type LoginType = 'phone' | 'account';
@@ -25,6 +25,7 @@ const iconStyles: CSSProperties = {
 export default function Login() {
     const [loginType, setLoginType] = useState<LoginType>('account');
     const navigate = useNavigate();
+    const location = useLocation();
     return (
         <div
             style={{
@@ -72,8 +73,8 @@ export default function Login() {
                     if (res.code == 200 && res.data) {
                         localStorage.setItem('access_token', res.data.access_token);
                         localStorage.setItem('refresh_token', res.data.refresh_token);
+                        navigate('/uc/users');
                     }
-                    navigate('/');
                 }}
                 actions={
                     <div
@@ -148,10 +149,8 @@ export default function Login() {
                     centered
                     activeKey={loginType}
                     onChange={(activeKey) => setLoginType(activeKey as LoginType)}
-                >
-                    <Tabs.TabPane key={'account'} tab={'账号密码登录'} />
-                    <Tabs.TabPane key={'phone'} tab={'手机号登录'} />
-                </Tabs>
+                    items={[{ key: 'account', label: '账号密码登录' }, { key: 'phone', label: '手机号登录' }]}
+                />
                 {loginType === 'account' && (
                     <>
                         <ProFormText

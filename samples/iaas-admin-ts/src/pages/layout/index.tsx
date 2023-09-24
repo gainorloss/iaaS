@@ -27,7 +27,6 @@ const Layout: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
-  console.log(process.env);
 
   return (
     <>

@@ -7,7 +7,7 @@ x-common: &common
 version: '3'
 services:
   sample.api-dev:
-    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.17.5
+    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.24.1
     ports:
       - 7001:80
     environment: &sample-api-env
@@ -16,7 +16,7 @@ services:
       replicas: 1
     <<: *common
   sample.api:
-    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.17.5
+    image: registry.cn-shanghai.aliyuncs.com/galosoft/dev.api:2023.09.24.1
     environment: *sample-api-env
     deploy:
       replicas: 2
@@ -24,7 +24,7 @@ services:
         order: start-first
     <<: *common
   iaas-admin-ts:
-    image: registry.cn-shanghai.aliyuncs.com/galosoft/iaas-admin-ts:2023.09.16.1
+    image: registry.cn-shanghai.aliyuncs.com/galosoft/iaas-admin-ts:2023.09.24.1
     ports:
       - 8080:80
     volumes:
@@ -51,6 +51,51 @@ services:
       - COLLECTOR_ZIPKIN_HOST_PORT=:9411
     networks:
       - sample
+  nacos-server:
+    image: nacos/nacos-server@sha256:38cb6e6244635b7fd287600bc055eba4d970e9e002dc70c40da871ecad7c8fe2
+    ports:
+      - 8848:8848
+      - 9848:9848
+      - 9849:9849
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+      - db_pool_config_connetionTimeout=60000
+      - NACOS_AUTH_ENABLE=true
+      - NACOS_AUTH_TOKEN=SecretKey012345678901234567890123456789012345678901234567890123456789
+      - NACOS_AUTH_IDENTITY_KEY=serverIdentity
+      - NACOS_AUTH_IDENTITY_VALUE=security
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=mysql
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_DB_NAME=nacos_config
+      - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&useSSL=false&allowPublicKeyRetrieval=true
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=jY0#R599#%17#&5g^^B!zT$#9g0A0Z
+    networks:
+      - sample
+  mysql: 
+    # 指定镜像和版本
+    # image: mysql:5.7.35         
+    image: mysql:8.0.31            
+    ports:
+      - "13306:3306"
+    restart: always
+    # 容器日志大小配置
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '5g'
+    environment:
+      # 配置root密码
+      MYSQL_ROOT_PASSWORD: jY0#R599#%17#&5g^^B!zT$#9g0A0Z
+    volumes:
+      # 挂载数据目录
+      - nacos-data:/var/lib/mysql
+      # 挂载配置文件目录
+      - ./config:/etc/mysql/conf.d 
 networks:
   sample:
    driver: bridge
+volumes:
+  nacos-data:

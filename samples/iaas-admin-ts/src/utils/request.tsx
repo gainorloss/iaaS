@@ -1,5 +1,6 @@
+import { router } from "@/router";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 
 axios.defaults.timeout = 2000;
 // axios.defaults.headers.common["Authorization"] = "erp";
@@ -22,13 +23,14 @@ axios.interceptors.response.use(res => {
     if (error.response) {
         switch (error.response.status) {
             case 401:
-                localStorage.removeItem('access_token');
                 // 返回 401 清除token信息并跳转到登录页面
                 // store.commit(types.LOGOUT);
                 // router.replace({
                 //     path: 'login',
                 //     query: { redirect: router.currentRoute.fullPath }
                 // })
+                localStorage.removeItem('access_token');
+                window.location.hash=`login?redirect=/uc/users`;
         }
     }
     return Promise.reject(error);
