@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import {
   SearchOutlined,
   PlusCircleFilled,
   InfoCircleFilled,
   QuestionCircleFilled,
-  GithubFilled
+  GithubFilled,
+  LogoutOutlined
 } from '@ant-design/icons';
-import { theme, Input } from 'antd';
+import { theme, Input, Dropdown } from 'antd';
 
-import { Outlet, useNavigate, useNavigation } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import logo from '@/logo.svg';
 import { ProLayout, MenuDataItem, SettingDrawer, ProSettings, PageContainer } from '@ant-design/pro-components';
 import { menus } from '@/config/menus';
+import { CurrentUserState, logout } from '@/features/currentUser/currentUserSlice';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 
 const loopMenuItem = (menus: any[]): MenuDataItem[] =>
   menus.map(({ title, key, children }) => ({
@@ -27,7 +30,8 @@ const Layout: React.FC = () => {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
-
+  const currentUser = useAppSelector(state=>state.currentUser.user);
+  const dispatch = useAppDispatch();
   return (
     <>
       <ProLayout
@@ -41,7 +45,30 @@ const Layout: React.FC = () => {
         avatarProps={{
           src: 'https://gw.alipayobjects.com/zos/antfincdn/efFD%24IOql2/weixintupian_20170331104822.jpg',
           size: 'small',
-          title: '七妮妮',
+          title: currentUser.name,
+          render: (props, dom) => {
+            return (
+              <Dropdown
+                menu={{
+                  onClick: props => {
+                    if (props.key === 'logout') {
+                      dispatch(logout());
+                      navigate('login');
+                    }
+                  },
+                  items: [
+                    {
+                      key: 'logout',
+                      icon: <LogoutOutlined />,
+                      label: '退出登录',
+                    },
+                  ],
+                }}
+              >
+                {dom}
+              </Dropdown>
+            );
+          }
         }}
         actionsRender={(props) => {
           if (props.isMobile) return [];
@@ -84,9 +111,9 @@ const Layout: React.FC = () => {
                 />
               </div>
             ) : undefined,
-            <InfoCircleFilled key="InfoCircleFilled" />,
-            <QuestionCircleFilled key="QuestionCircleFilled" />,
-            <GithubFilled key="GithubFilled" />,
+            // <InfoCircleFilled key="InfoCircleFilled" />,
+            // <QuestionCircleFilled key="QuestionCircleFilled" />,
+            // <GithubFilled key="GithubFilled" />,
           ];
         }}
         // route={{routes:routes}}

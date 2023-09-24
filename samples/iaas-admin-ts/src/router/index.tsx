@@ -1,4 +1,4 @@
-import {  Route, RouteObject, createBrowserRouter, createRoutesFromElements, useNavigate} from "react-router-dom";
+import { Route, RouteObject, createBrowserRouter, createRoutesFromElements, useNavigate } from "react-router-dom";
 import Home from "../pages/Home"
 import Product from "../pages/pc/spu/Product";
 import Login from "../pages/Login";
@@ -43,7 +43,7 @@ const RouteAuthFun = (
                     <Route
                         path={item.path}
                         element={
-                            <AuthRoute auth={item.auth} key={item.path}>
+                            <AuthRoute {...item} auth={item.auth} key={item.path} >
                                 {item.element}
                             </AuthRoute>
                         }

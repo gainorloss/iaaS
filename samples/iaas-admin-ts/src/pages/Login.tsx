@@ -10,9 +10,11 @@ import {
     UserOutlined,
     WeiboCircleOutlined, WeiboOutlined
 } from '@ant-design/icons';
-import { CSSProperties, useEffect, useState } from "react";
+import { CSSProperties, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import request from "@/utils/request";
+import { login } from "@/features/currentUser/currentUserSlice";
+import { useAppDispatch } from "@/app/hooks";
 
 type LoginType = 'phone' | 'account';
 
@@ -26,6 +28,7 @@ export default function Login() {
     const [loginType, setLoginType] = useState<LoginType>('account');
     const navigate = useNavigate();
     const location = useLocation();
+    const dispatch = useAppDispatch();
     return (
         <div
             style={{
@@ -63,18 +66,33 @@ export default function Login() {
                 //     ),
                 // }}
                 onFinish={async values => {
-                    await new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve(true);
-                        }, 20);
-                    });
-                    console.log(values);
+
                     const res = await request({ url: '/api/oauth/auth', method: 'get' });
-                    if (res.code == 200 && res.data) {
-                        localStorage.setItem('access_token', res.data.access_token);
-                        localStorage.setItem('refresh_token', res.data.refresh_token);
-                        navigate('/uc/users');
+                    if (res.code != 200 || !res.data) {
+                        message.error('登录失败，请重试');
+                        return;
                     }
+
+                    localStorage.setItem('access_token', res.data.access_token);
+                    localStorage.setItem('refresh_token', res.data.refresh_token);
+                    const profile_res = await request({ url: '/api/oauth/profile', method: 'get' });
+                    if (profile_res.code != 200 || !profile_res.data) {
+                        message.error('获取用户信息失败，请登录重试');
+                        return;
+                    }
+                    localStorage.setItem('user', profile_res.data['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name']);
+                    dispatch(login({
+                        user:
+                        {
+                            id: 1,
+                            name: 'administrator'
+                        },
+                        token: {
+                            ...res.data
+                        },
+                        isLogin: true
+                    }));
+                    navigate('/');
                 }}
                 actions={
                     <div

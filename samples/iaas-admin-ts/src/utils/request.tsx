@@ -1,4 +1,3 @@
-import { router } from "@/router";
 import axios from "axios";
 
 
@@ -30,7 +29,12 @@ axios.interceptors.response.use(res => {
                 //     query: { redirect: router.currentRoute.fullPath }
                 // })
                 localStorage.removeItem('access_token');
-                window.location.hash=`login?redirect=/uc/users`;
+                localStorage.removeItem('refresh_token');
+                localStorage.removeItem('user');
+                var pathname = window.location.pathname;
+                console.log(pathname);
+
+                window.location.href = `login?redirect=${pathname}`;
         }
     }
     return Promise.reject(error);
