@@ -27,12 +27,21 @@ services:
     image: registry.cn-shanghai.aliyuncs.com/galosoft/iaas-admin-ts:2023.09.24.1
     ports:
       - 8080:80
+      - 10443:443
     volumes:
-      - ./default.conf:/etc/nginx/conf.d/default.conf
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - certbot-www:/usr/share/certbot/www:ro #http验证目录，可设置ro为只读，因为文件最终时通过certbot容器映射来的
+      - certbot-ssl:/usr/share/certbot/ssl:ro #证书位置，同上
     environment:
       - NODE_ENV=production
     <<: *common
+  # certbot:
+  #   image: certbot/certbot
+  #   volumes:
+  #         - certbot-www:/usr/share/certbot/www:rw #http验证目录，可设置rw可写，与nginx容器对应的宿主机目录时一致的
+  #         - certbot-ssl:/etc/letsencrypt:rw #证书位置，同上，注意不要只映射到live，而是它的上一级
+  #   command: [ "certonly","--webroot","--webroot-path","/usr/share/certbot/www/","-d","admin.galos.top"]
   jaeger:
     image: quay.io/jaegertracing/all-in-one:1.49
     ports:
@@ -99,3 +108,6 @@ networks:
    driver: bridge
 volumes:
   nacos-data:
+  certbot-ssl:
+  certbot-www:
+  
