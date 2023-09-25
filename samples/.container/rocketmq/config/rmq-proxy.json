@@ -1,0 +1,5 @@
+{
+    "rocketMQClusterName":"DefaultCluster",
+    "remotingListenPort":28080,
+    "grpcServerPort":28081
+}

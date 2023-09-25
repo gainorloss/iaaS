@@ -10,18 +10,30 @@ services:
     networks:
       - rocketmq
   broker:
-    image: apache/rocketmq:5.1.0
-    command:  ./mqbroker -n namesrv:9876 -c /home/rocketmq/broker.conf  --enable-proxy
+    image: apache/rocketmq:5.1.0 
+    command:  ./mqbroker
     # command:  ./mqbroker -n namesrv:9876
     privileged: true
     ports:
-      - 10081:8081
       - 10912:10912
       - 10911:10911
       - 10909:10909
     volumes:
       - broker-store:/home/rocketmq/store
-      - ./config/broker.conf:/home/rocketmq/broker.conf
+      - ./config/broker.conf:/home/rocketmq/rocketmq-5.1.0/broker.conf:rw
+    environment:
+      - NAMESRV_ADDR=namesrv:9876
+    networks:
+      - rocketmq
+  proxy:
+    image: apache/rocketmq:5.1.0
+    command:  ./mqproxy 
+    privileged: true
+    ports:
+      - 28080:28080
+      - 28081:28081
+    volumes:
+      - ./config/rmq-proxy.json:/home/rocketmq/rocketmq-5.1.0/conf/rmq-proxy.json:rw
     environment:
       - NAMESRV_ADDR=namesrv:9876
     networks:

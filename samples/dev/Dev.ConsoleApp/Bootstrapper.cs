@@ -106,19 +106,34 @@ namespace Dev.ConsoleApp
         {
             //AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             var clientConfig = new ClientConfig.Builder()
-                  .SetEndpoints("localhost:10081")
+                  .SetEndpoints("localhost:28080")
                   .EnableSsl(false)
                   .Build();
 
-           var consumer = await new SimpleConsumer.Builder()
-                  .SetClientConfig(clientConfig)
-                  .SetAwaitDuration(TimeSpan.FromSeconds(15))
-                  .SetConsumerGroup("oc_order_created")
-                  .SetSubscriptionExpression(new Dictionary<string, FilterExpression> { { "oc_test", new FilterExpression("*") } })
-                  .Build();
+            var consumer = await new SimpleConsumer.Builder()
+                   .SetClientConfig(clientConfig)
+                   .SetAwaitDuration(TimeSpan.FromSeconds(5))
+                   .SetConsumerGroup("oc_order_created")
+                   .SetSubscriptionExpression(new Dictionary<string, FilterExpression> { { "oc_test", new FilterExpression("*") } })
+                   .Build();
+            var idx = 0;
             while (true)
             {
+                Tracer.Trace($"{++idx}:尝试获取", "接收消息");
                 var mvs = await consumer.Receive(16, TimeSpan.FromSeconds(15));
+                if (!mvs.Any())
+                {
+                    Tracer.Trace($"{idx}:未获取到", "接收消息");
+                    Thread.Sleep(1000);
+                    continue;
+                }
+
+                foreach (var mv in mvs)
+                {
+                    Tracer.Trace($"{idx}:{mv.MessageId}:{Encoding.UTF8.GetString(mv.Body)}", "接收消息");
+                    await consumer.Ack(mv);
+                    Tracer.Trace($"{idx}:{mv.MessageId}:{Encoding.UTF8.GetString(mv.Body)} 已ack", "接收消息");
+                }
             }
         }
 
