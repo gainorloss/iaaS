@@ -1,6 +1,8 @@
 ﻿using Dev.Application;
 using Dev.ConsoleApp.Entities;
+using Dev.ConsoleApp.Rmq;
 using Dev.ConsoleApp.Services;
+using Galosoft.IaaS.Core;
 using Galosoft.IaaS.Dev;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Nacos.V2.DependencyInjection;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -69,6 +72,10 @@ namespace Dev.ConsoleApp
                 opt.EnableDetailedErrors(true);
             })
                 .AddTransient<OrderService>();
+
+            services.TryAddSingleton<IObjectSerializer, MicrosoftJsonSerializer>();
+            services.TryAddSingleton(sp=>SnowflakeIdGenerator.Instance);
+            services.TryAddSingleton<RmqClient>();
         }
     }
 }
