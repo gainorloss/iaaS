@@ -80,7 +80,8 @@ namespace Dev.ConsoleApp.Rmq
                     }
                     catch (Exception e)
                     {
-                        Tracer.Trace($"{idx}【{Thread.CurrentThread.ManagedThreadId}】:no msg......[消息拉取异常]", "rmq 处理器");
+                        Tracer.Trace($"{idx}【{Thread.CurrentThread.ManagedThreadId}】:no msg......[消息拉取异常][{e.Message}]", "rmq 处理器");
+                        await Task.Delay(5000);
                     }
                 }
             });
