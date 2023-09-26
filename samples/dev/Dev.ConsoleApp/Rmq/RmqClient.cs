@@ -9,105 +9,148 @@ using System.Diagnostics;
 using System.Threading;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Primitives;
+using System.Collections.Concurrent;
 
 namespace Dev.ConsoleApp.Rmq
 {
-    internal class RmqClient : IDisposable
+    public class RmqClient : IDisposable
     {
-        private ClientConfig clientConfig;
+        private ClientConfig _clientConfig;
         private readonly IObjectSerializer _objectSerializer;
-        Producer _producer;
-        public RmqClient(IObjectSerializer objectSerializer, IConfiguration configuration)
+        private static IDictionary<string, Producer> Producers = new ConcurrentDictionary<string, Producer>();
+        private static IDictionary<string, SimpleConsumer> SimpleConsumers = new ConcurrentDictionary<string, SimpleConsumer>();
+        public RmqClient(IObjectSerializer objectSerializer, ClientConfig clientConfig)
         {
             _objectSerializer = objectSerializer;
-            if (clientConfig is null)
-            {
-                var configBuilder = new ClientConfig.Builder();
-
-                var endpoints = configuration.GetValue<string>("RocketMQ:Endpoints");
-                if (!string.IsNullOrEmpty(endpoints))
-                    configBuilder.SetEndpoints(endpoints);
-
-                var ssl = configuration.GetValue<bool>("RocketMQ:Ssl");
-                configBuilder.EnableSsl(ssl);
-
-                clientConfig = configBuilder.Build();
-            }
+            _clientConfig = clientConfig;
         }
 
-        public async Task DistributeAsync<T>(T msg, string topic, RmqProperty property, params string[] keys)
+        public async Task DistributeAsync<T>(T msg, RmqProperty prop, string topic, string tag = "*", params string[] keys)
         {
-            Tracer.Trace($"hashcode:{GetHashCode()}", $"分发");
-            await InitializeAsync();
+            var producer = await GetOrCreateProducerAsync(topic);
             var message = new Message.Builder()
+                  .SetTag(tag)
                   .SetTopic(topic)
                   .SetKeys(keys)
                   .SetBody(Encoding.UTF8.GetBytes(_objectSerializer.Serialize(msg)));
-            if (property.Delay > 0)
-                message.SetDeliveryTimestamp(DateTime.Now + TimeSpan.FromMilliseconds(property.Delay));
 
-            await _producer.Send(message.Build());
+            if (prop.Delay > 0)
+                message.SetDeliveryTimestamp(DateTime.Now + TimeSpan.FromMilliseconds(prop.Delay));
+
+            if (!string.IsNullOrEmpty(prop.MessageGroup))
+                message.SetMessageGroup(prop.MessageGroup);
+
+            await producer.Send(message.Build());
         }
 
-        public async Task HandleAsync<T>(Func<T, Task<bool>> handler, string topic, string consumerGroup)
+        public async Task HandleAsync<T>(Func<T, Task<bool>> handler, string topic, string tag = "*")
         {
-            var consumer = await new SimpleConsumer.Builder()
-                 .SetClientConfig(clientConfig)
-                 .SetAwaitDuration(TimeSpan.FromSeconds(5))
-                 .SetConsumerGroup(consumerGroup)
-                 .SetSubscriptionExpression(new Dictionary<string, FilterExpression> { { topic, new FilterExpression("*") } })
-                 .Build();
-            Tracer.Trace($"======={consumerGroup}正在订阅{topic}======", "rmq 处理器");
-            var idx = 0;
-            while (true)
+            var consumer = await GetOrCreateSimpleConsumer(topic, tag);
+            Tracer.Trace($"=======正在订阅 TOPIC:{topic},TAG:{tag}======", "rmq 处理器");
+            await Task.Run(async () =>
             {
-                ++idx;
-                //Tracer.Trace($"{++idx}:尝试获取", "rmq 处理器");
-                var mvs = await consumer.Receive(16, TimeSpan.FromSeconds(15));
-                if (!mvs.Any())
+                var idx = 0;
+                while (true)
                 {
-                    Tracer.Trace($"{idx}:no msg......", "rmq 处理器");
-                    Thread.Sleep(1000);
-                    continue;
-                }
-
-                foreach (var mv in mvs)
-                {
-                    var body = Encoding.UTF8.GetString(mv.Body);
-                    var msg = _objectSerializer.Deserialize<T>(body);
-                    var rt = await handler?.Invoke(msg);
-                    if (!rt)
+                    ++idx;
+                    try
                     {
-                        Tracer.Trace($"{idx}:{mv.MessageId}:{body}", "rmq 处理器");
-                        continue;
+                        var mvs = await consumer.Receive(16, TimeSpan.FromSeconds(15));
+                        if (!mvs.Any())
+                        {
+                            Tracer.Trace($"{idx}【{Thread.CurrentThread.ManagedThreadId}】:no msg......", "rmq 处理器");
+                            Thread.Sleep(1000);
+                            continue;
+                        }
+
+                        foreach (var mv in mvs)
+                        {
+                            var body = Encoding.UTF8.GetString(mv.Body);
+                            var msg = _objectSerializer.Deserialize<T>(body);
+                            var rt = await handler?.Invoke(msg);
+                            if (!rt)
+                            {
+                                Tracer.Trace($"{idx}【{Thread.CurrentThread.ManagedThreadId}】:{mv.MessageId}", "rmq 处理器");
+                                continue;
+                            }
+                            await consumer.Ack(mv);
+                            Tracer.Trace($"{idx}【{Thread.CurrentThread.ManagedThreadId}】:{mv.MessageId} 已 ACK!!!", "rmq 处理器");
+                        }
                     }
-                    await consumer.Ack(mv);
-                    Tracer.Trace($"{idx}:{mv.MessageId}:{Encoding.UTF8.GetString(mv.Body)} 已ack!!!", "rmq 处理器");
+                    catch (Exception e)
+                    {
+                        Tracer.Trace($"{idx}【{Thread.CurrentThread.ManagedThreadId}】:no msg......[消息拉取异常]", "rmq 处理器");
+                    }
                 }
-            }
+            });
+        }
+
+        private static string GetConsumerGroup(string topic, string tag)
+        {
+            var cGroup = topic;
+            if (!string.IsNullOrEmpty(tag) && !tag.Equals("*"))
+                cGroup = $"{topic}-{tag}";
+            return cGroup;
+        }
+
+        private async Task<SimpleConsumer> GetOrCreateSimpleConsumer(string topic, string tag)
+        {
+            var cGroup = GetConsumerGroup(topic, tag);
+
+            if (SimpleConsumers.TryGetValue(cGroup, out var consumer) && consumer is not null)
+                return consumer;
+
+            consumer = await new SimpleConsumer.Builder()
+                 .SetClientConfig(_clientConfig)
+                 .SetAwaitDuration(TimeSpan.FromSeconds(5))
+                 .SetConsumerGroup(cGroup)
+                 .SetSubscriptionExpression(new Dictionary<string, FilterExpression> { { topic, new FilterExpression(tag) } })
+                 .Build();
+            SimpleConsumers[topic] = consumer;
+
+            return consumer;
+        }
+
+        private async Task<Producer> GetOrCreateProducerAsync(string topic)
+        {
+            if (Producers.TryGetValue(topic, out var producer) && producer is not null)
+                return producer;
+
+            producer = await new Producer.Builder()
+                .SetClientConfig(_clientConfig)
+                .SetTopics(topic)
+                .Build();
+            Producers[topic] = producer;
+
+            return producer;
         }
 
         public void Dispose()
         {
-            _producer.Dispose();
-        }
-
-        private async Task InitializeAsync()
-        {
-            if (_producer is not null)
-                return;
-
-            _producer = await new Producer.Builder()
-                .SetClientConfig(clientConfig)
-                .Build();
+            foreach (var producer in Producers)
+            {
+                if (producer.Value is null)
+                    continue;
+                producer.Value.Dispose();
+            }
+            foreach (var consumer in SimpleConsumers)
+            {
+                if (consumer.Value is null)
+                    continue;
+                consumer.Value.Dispose();
+            }
         }
     }
     public class RmqProperty
     {
-        public RmqProperty(int delay = 0)
+        public RmqProperty(int delay = 0, string mGroup = null)
         {
             Delay = delay;
+            MessageGroup = mGroup;
+
         }
         public int Delay { get; protected set; }
+        public string MessageGroup { get; protected set; }
     }
 }

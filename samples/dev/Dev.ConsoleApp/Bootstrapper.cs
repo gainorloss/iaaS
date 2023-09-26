@@ -115,13 +115,15 @@ namespace Dev.ConsoleApp
 
         private async Task RmqTestAsync()
         {
-            await _rmq.DistributeAsync(RestResult.Succeed("rmq"), "oc_test", new RmqProperty(), _snowflakeId.nextId().ToString());
+            var topic = "oc_test";
+            //await _rmq.DistributeAsync(RestResult.Succeed("rmq"), new RmqProperty(), $"{topic}", _snowflakeId.nextId().ToString());
+            //await _rmq.DistributeAsync(RestResult.Succeed("rmq"), new RmqProperty(mGroup:"fifo"), $"{topic}-fifo", _snowflakeId.nextId().ToString());
+            //await _rmq.DistributeAsync(RestResult.Succeed("rmq"), new RmqProperty(), $"{topic}-delay", _snowflakeId.nextId().ToString());
             await _rmq.HandleAsync<RestResult>(async msg =>
             {
-                await _rmq.DistributeAsync(RestResult.Succeed("rmq"), "oc_test", new RmqProperty(), _snowflakeId.nextId().ToString());
                 await Task.Delay(100);
                 return true;
-            }, "oc_test", "oc_order_created");
+            }, topic, "*");
         }
 
         private void ServiceCollectionTest()

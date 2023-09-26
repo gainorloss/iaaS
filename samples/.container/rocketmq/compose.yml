@@ -49,7 +49,7 @@ services:
   handler:
     image: registry.cn-shanghai.aliyuncs.com/galosoft/rmq-handler:2023.09.25.2
     deploy:
-      replicas: 3
+      replicas: 1
     networks:
       - rocketmq
     depends_on:

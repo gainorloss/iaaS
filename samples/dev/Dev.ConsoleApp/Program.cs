@@ -1,15 +1,18 @@
-﻿using Dev.Application;
+﻿using AngleSharp;
+using Dev.Application;
 using Dev.ConsoleApp.Entities;
 using Dev.ConsoleApp.Rmq;
 using Dev.ConsoleApp.Services;
 using Galosoft.IaaS.Core;
 using Galosoft.IaaS.Dev;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Nacos.V2.DependencyInjection;
+using Org.Apache.Rocketmq;
 using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
@@ -74,7 +77,22 @@ namespace Dev.ConsoleApp
                 .AddTransient<OrderService>();
 
             services.TryAddSingleton<IObjectSerializer, MicrosoftJsonSerializer>();
-            services.TryAddSingleton(sp=>SnowflakeIdGenerator.Instance);
+            services.TryAddSingleton(sp => SnowflakeIdGenerator.Instance);
+
+            services.TryAddSingleton(sp =>
+            {
+                var configuration = sp.GetRequiredService<Microsoft.Extensions.Configuration.IConfiguration>();
+                var configBuilder = new ClientConfig.Builder();
+
+                var endpoints = configuration.GetValue<string>("RocketMQ:Endpoints");
+                if (!string.IsNullOrEmpty(endpoints))
+                    configBuilder.SetEndpoints(endpoints);
+
+                var ssl = configuration.GetValue<bool>("RocketMQ:Ssl");
+                configBuilder.EnableSsl(ssl);
+
+                return configBuilder.Build();
+            });
             services.TryAddSingleton<RmqClient>();
         }
     }
