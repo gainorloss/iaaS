@@ -5,11 +5,13 @@ using Dev.Application.Contracts;
 using Dev.ConsoleApp.DynamicProxy;
 using Dev.ConsoleApp.Entities;
 using Dev.ConsoleApp.RestClients;
+using Dev.ConsoleApp.Rmq;
 using Dev.ConsoleApp.Services;
 using Dev.ConsoleApp.WindowsAPI;
 using Dev.Core.Models;
 using Dev.Entities;
 using FreeRedis;
+using Galosoft.IaaS.Core;
 using Galosoft.IaaS.Dev;
 using Galosoft.IaaS.Redis;
 using Microsoft.EntityFrameworkCore;
@@ -51,6 +53,9 @@ namespace Dev.ConsoleApp
         private readonly DynamicProxyGenerator _proxyGenerator;
         private readonly IServiceProvider _root;
         private readonly IServiceScopeFactory _scopeFactory;
+        private readonly IObjectSerializer _serializer;
+        private readonly SnowflakeIdGenerator _snowflakeId;
+        private readonly RmqClient _rmq;
         private readonly HttpClient _client;
 
         public Bootstrapper(IPerformanceTester performanceTester,
@@ -66,7 +71,10 @@ namespace Dev.ConsoleApp
             IComponentSvc component,
             DynamicProxyGenerator proxyGenerator,
             IServiceProvider root,
-            IServiceScopeFactory scopeFactory)
+            IServiceScopeFactory scopeFactory,
+            IObjectSerializer serializer,
+            SnowflakeIdGenerator snowflakeId,
+            RmqClient rmq)
         {
             _performanceTester = performanceTester;
             _sampleSvc = sampleSvc;
@@ -81,6 +89,9 @@ namespace Dev.ConsoleApp
             _proxyGenerator = proxyGenerator;
             _root = root;
             _scopeFactory = scopeFactory;
+            _serializer = serializer;
+            _snowflakeId = snowflakeId;
+            _rmq = rmq;
             _client = factory.CreateClient();
         }
 
@@ -104,37 +115,13 @@ namespace Dev.ConsoleApp
 
         private async Task RmqTestAsync()
         {
-            //AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-            var clientConfig = new ClientConfig.Builder()
-                  .SetEndpoints("localhost:28080")
-                  .EnableSsl(false)
-                  .Build();
-
-            var consumer = await new SimpleConsumer.Builder()
-                   .SetClientConfig(clientConfig)
-                   .SetAwaitDuration(TimeSpan.FromSeconds(5))
-                   .SetConsumerGroup("oc_order_created")
-                   .SetSubscriptionExpression(new Dictionary<string, FilterExpression> { { "oc_test", new FilterExpression("*") } })
-                   .Build();
-            var idx = 0;
-            while (true)
+            await _rmq.DistributeAsync(RestResult.Succeed("rmq"), "oc_test", new RmqProperty(), _snowflakeId.nextId().ToString());
+            await _rmq.HandleAsync<RestResult>(async msg =>
             {
-                Tracer.Trace($"{++idx}:尝试获取", "接收消息");
-                var mvs = await consumer.Receive(16, TimeSpan.FromSeconds(15));
-                if (!mvs.Any())
-                {
-                    Tracer.Trace($"{idx}:未获取到", "接收消息");
-                    Thread.Sleep(1000);
-                    continue;
-                }
-
-                foreach (var mv in mvs)
-                {
-                    Tracer.Trace($"{idx}:{mv.MessageId}:{Encoding.UTF8.GetString(mv.Body)}", "接收消息");
-                    await consumer.Ack(mv);
-                    Tracer.Trace($"{idx}:{mv.MessageId}:{Encoding.UTF8.GetString(mv.Body)} 已ack", "接收消息");
-                }
-            }
+                await _rmq.DistributeAsync(RestResult.Succeed("rmq"), "oc_test", new RmqProperty(), _snowflakeId.nextId().ToString());
+                await Task.Delay(100);
+                return true;
+            }, "oc_test", "oc_order_created");
         }
 
         private void ServiceCollectionTest()

@@ -12,7 +12,6 @@ services:
   broker:
     image: apache/rocketmq:5.1.0
     command:  ./mqbroker
-    # command:  ./mqbroker -n namesrv:9876
     privileged: true
     ports:
       - 10912:10912
@@ -47,6 +46,14 @@ services:
       - JAVA_OPTS=-Drocketmq.namesrv.addr=namesrv:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false
     networks:
       - rocketmq
+  handler:
+    image: registry.cn-shanghai.aliyuncs.com/galosoft/rmq-handler:2023.09.25.2
+    deploy:
+      replicas: 3
+    networks:
+      - rocketmq
+    depends_on:
+      - proxy
 networks:
   rocketmq:
     driver: bridge

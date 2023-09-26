@@ -5,9 +5,10 @@ namespace Galosoft.IaaS.Core
     /// <summary>
     /// 服务层响应实体(泛型)
     /// </summary>
-    public class RestResult<T>
+    public record RestResult<T>
     {
         public RestResult() { }
+
         public RestResult(
             RestResultCode code,
             string msg = default,
@@ -54,8 +55,10 @@ namespace Galosoft.IaaS.Core
     /// 服务层响应实体
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class RestResult : RestResult<object>
+    public record RestResult : RestResult<object>
     {
+        public RestResult()
+        { }
         public RestResult(
             RestResultCode code,
             string msg = null,
@@ -84,7 +87,7 @@ namespace Galosoft.IaaS.Core
         /// <param name="msg"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static RestResult Fail(RestResultCode resultCode= RestResultCode.Error, string msg = "操作失败", object? data = default)
+        public static RestResult Fail(RestResultCode resultCode = RestResultCode.Error, string msg = "操作失败", object? data = default)
         {
             return new RestResult(resultCode, msg, data);
         }
