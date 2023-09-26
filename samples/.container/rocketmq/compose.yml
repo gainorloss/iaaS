@@ -10,7 +10,7 @@ services:
     networks:
       - rocketmq
   broker:
-    image: apache/rocketmq:5.1.0 
+    image: apache/rocketmq:5.1.0
     command:  ./mqbroker
     # command:  ./mqbroker -n namesrv:9876
     privileged: true
