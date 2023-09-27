@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  fluentd:
+   image: fluent/fluentd:edge-debian
+   ports:
+    - 24224:24224
+   volumes:
+    - ./config/:/fluentd/etc
+    - /var/log/fluentd:/var/log/fluentd
+   environment:
+    - FLUENTD_CONF=fluentd.conf

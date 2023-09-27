@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  dujiaoka:
+    image: jiangjuhong/dujiaoka
+    ports:
+      - 8888:80
+      - 9000:9000
+    environment:
+      - WEB_DOCUMENT_ROOT=/app/public

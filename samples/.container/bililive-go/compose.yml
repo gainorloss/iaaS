@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  bililive:
+    image: chigusa/bililive-go:latest
+    container_name: bililive
+    restart: unless-stopped
+    network_mode: bridge
+    ports:
+      - '5009:8080'
+    volumes:
+      - ./config/config.yml:/etc/bililive-go/config.yml:rw
+      - ./video:/srv/bililive
