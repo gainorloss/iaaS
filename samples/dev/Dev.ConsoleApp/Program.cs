@@ -44,23 +44,24 @@ namespace Dev.ConsoleApp
 
         private static void ConfigureServices(HostBuilderContext ctx, IServiceCollection services)
         {
-            services.AddRedisClient(ctx.Configuration);
-
             services.AddSnowflakeId();//新增：参考 cap的snowflakeid生成算法 galoS@2023-9-28 10:27:23
+            services.AddRedisClient(ctx.Configuration);
             services.AddRabbitMQ();//新增：配置合并提取 galo@2022-4-25 16:29:56
             services.AddRocketMQ();//新增：rmqclient galo@2023-9-28 10:18:41
+
             services.AddNacosV2Config(ctx.Configuration);//nacos
 
-            services.AddHostedService<Bootstrapper>();
+            //services.AddScannable(KeyValuePair.Create((Type t) => t.Name.EndsWith("Service"), ServiceRegistrationType.Transient));//Inject service.
+            services.AddScannableIntercepted(KeyValuePair.Create((Type t) => t.Name.EndsWith("Service"), ServiceRegistrationType.Transient));
+            services.AddScannable(KeyValuePair.Create((Type t) => t.Name.EndsWith("Handler"), ServiceRegistrationType.Transient));//Inject handler.
 
+
+            services.AddSingleton<IPerformanceTester, PerformanceTester>();
             //services.AddRestClient("https://jsonplaceholder.typicode.com/", builder =>
             //{
             //    //builder.AddHeaderPropagation(opt => opt.Headers.Add("X-TraceId"));
             //});
-            services.AddSingleton<IPerformanceTester, PerformanceTester>();
-
-            //services.AddScannable(KeyValuePair.Create((Type t) => t.Name.EndsWith("Service"), ServiceRegistrationType.Transient));
-            services.AddScannableIntercepted(KeyValuePair.Create((Type t) => t.Name.EndsWith("Service"), ServiceRegistrationType.Transient));
+            services.AddHostedService<Bootstrapper>();
 
             services.AddDynamicProxy();
             services.AddTransient<LoggingDynamicInterceptor>();
@@ -71,9 +72,6 @@ namespace Dev.ConsoleApp
                 opt.EnableDetailedErrors(true);
             })
                 .AddTransient<OrderService>();
-
-
-            services.AddScannable(KeyValuePair.Create((Type t) => t.Name.EndsWith("Handler"), ServiceRegistrationType.Transient));
         }
     }
 }

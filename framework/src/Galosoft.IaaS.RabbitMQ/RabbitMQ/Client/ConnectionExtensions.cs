@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
@@ -477,7 +478,7 @@ namespace RabbitMQ.Client
                 }
             }
 
-            return messageKeyProperties;
+            return messageKeyProperties.Where(prop => prop is not null).ToArray();
         }
 
         private static PropertyInfo[]? GetMessageIdProperties(Type type)
@@ -492,7 +493,7 @@ namespace RabbitMQ.Client
                 }
             }
 
-            return messageIdProperties;
+            return messageIdProperties.Where(prop => prop is not null).ToArray();
         }
 
         private static void TrySetBasicProperties<T>(IBasicProperties props, T? msg)
@@ -527,10 +528,12 @@ namespace RabbitMQ.Client
                 var dic = new Dictionary<string, PropertyInfo[]>();
 
                 var messageIdProperties = GetMessageIdProperties(type);
-                dic.TryAdd("x-message-id", messageIdProperties.ToArray());
+                if (messageIdProperties != null && messageIdProperties.Any())
+                    dic.TryAdd("x-message-id", messageIdProperties.ToArray());
 
                 var messageKeyProperties = GetMessageKeyProperties(type);
-                dic.TryAdd("x-message-key", messageKeyProperties.ToArray());
+                if (messageKeyProperties != null && messageKeyProperties.Any())
+                    dic.TryAdd("x-message-key", messageKeyProperties.ToArray());
 
                 _basicPropertyMappings.TryAdd(type, dic);
             }
@@ -824,7 +827,6 @@ namespace RabbitMQ.Client
 
                             var serializer = sp.GetRequiredService<IObjectSerializer>();
 
-                            #region TODO:优化调用方式 当前为反射
                             var parameters = new List<object>();
                             if (paras.Any())
                             {
@@ -834,21 +836,17 @@ namespace RabbitMQ.Client
                                 }
                                 else
                                 {
-                                    parameters.Add(msg);
+                                    parameters.Add(serializer.Deserialize(msg.ToString(),firstType));
                                 }
                             }
-                            var rt = mi.Invoke(instance, parameters.ToArray());
-                            if (mi.ReturnType.IsAssignableTo(typeof(Task)))
-                            {
-                                var task = rt as Task;
-                                task.ConfigureAwait(false);
-                                rt = task.GetType().GetProperty("Result").GetValue(rt);
-                            }
-                            if (rt is Boolean b)
-                                return Task.FromResult(b);
-
-                            return Task.FromResult(true);
+                            #region 1. 反射调用
+                            var rt = InvokeHelper.ReflectionInvoke(mi, instance, parameters.ToArray());
                             #endregion
+
+                            #region 2:表达式调用
+                            //var rt = InvokeHelper.ExpressionInvoke(mi, instance, parameters.ToArray());
+                            #endregion
+                            return rt;
                         }
                     }
                     , msgType: firstType
@@ -856,6 +854,33 @@ namespace RabbitMQ.Client
                     , arguments: new QueueArgument(declared: queue.ResourceDeclared, idempotenceKeyFormat: string.Join(":", queue.Name, "{0}"), redis: redis));
                 }
             }
+        }
+
+
+    }
+
+    public static class InvokeHelper
+    {
+        public static Task<bool> ExpressionInvoke(MethodInfo mi, object instance, params object[] parameters)
+        {
+            Expression callExpr = Expression.Call(Expression.Constant(instance), mi, parameters.Select(para => Expression.Constant(para)).ToArray());
+            var rt = Expression.Lambda<Func<Task<bool>>>(callExpr).Compile()();
+            return rt;
+        }
+
+        public static Task<bool> ReflectionInvoke(MethodInfo mi, object instance, params object[] parameters)
+        {
+            var rt = mi.Invoke(instance, parameters.ToArray());
+            if (mi.ReturnType.IsAssignableTo(typeof(Task)))
+            {
+                var task = rt as Task;
+                task.ConfigureAwait(false);
+                rt = task.GetType().GetProperty("Result").GetValue(rt);
+            }
+            if (rt is Boolean b)
+                return Task.FromResult(b);
+
+            return Task.FromResult(true);
         }
     }
 }

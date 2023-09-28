@@ -22,6 +22,7 @@ using Org.Apache.Rocketmq;
 using RabbitMQ.Client;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -29,6 +30,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using ToolGood.Words;
+using Vanara.PInvoke;
 
 namespace Dev.ConsoleApp
 {
@@ -95,7 +97,8 @@ namespace Dev.ConsoleApp
             //await NacosConfigTestAsync();
             //var json = await _jsonPlaceholderClient.PostsGetAsync();
 
-            await DlxTestAsync();
+            //await DlxTestAsync();
+            //await InvokeTestAsync();
             //await CsbinTestAsync();
             //await RedisCodeGeneratorTestAsync();
             //_component.ThrowException();
@@ -301,17 +304,38 @@ namespace Dev.ConsoleApp
             //    Trace.WriteLine($"\t于{DateTime.Now.ToLongTimeString()}\t接收到{e.Message}", "“dlx”>");
             //    return true;
             //}, "spring.boot.amqp.test", arguments: arguments);
-            var idx = 0;
+            var idx = 100000;
             while (true)
             {
                 ++idx;
                 await Task.Delay(1000);
                 var msg = new SpringBootAmqpTestRequest
                 {
-                    MessageKey = idx.ToString(),
+                    MessageID = idx.ToString(),
                     Message = DateTime.Now.ToLongTimeString()
                 };
                 _factory.Distribute("spring.boot.amqp.test", arguments: arguments, msgs: msg);
+            }
+        }
+
+        private async Task InvokeTestAsync()
+        {
+            using (var scope = _root.CreateScope())
+            {
+                var sp = scope.ServiceProvider;
+                var handler = sp.GetRequiredService<SpringBootAmqpTestRequestHandler>();
+                var para = new SpringBootAmqpTestRequest
+                {
+                    MessageID = "9999",
+                    Message = DateTime.Now.ToLongTimeString()
+                };
+                var times = 30000l;
+                //1521 expression
+                await _performanceTester.SingleThreadAsync(async sw => await handler.Handle(para), times: times);
+
+                var mi = typeof(SpringBootAmqpTestRequestHandler).GetMethod(nameof(SpringBootAmqpTestRequestHandler.Handle));
+                await _performanceTester.SingleThreadAsync(async sw => await InvokeHelper.ReflectionInvoke(mi, handler, para), times: times, fact: "reflection");
+                await _performanceTester.SingleThreadAsync(async sw => await InvokeHelper.ExpressionInvoke(mi, handler, para), times: times, fact: "expression");
             }
         }
 
@@ -376,9 +400,9 @@ namespace Dev.ConsoleApp
 
     internal class SpringBootAmqpTestRequest
     {
-        [MessageId]
+        //[MessageId]
         //[MessageKey]
-        public string MessageKey { get; set; }
+        public string MessageID { get; set; }
         public string Message { get; set; }
         public int Bytes
         {
@@ -395,7 +419,7 @@ namespace Dev.ConsoleApp
         public async Task<bool> Handle(SpringBootAmqpTestRequest e)
         {
             //await Task.Delay(100);
-            Trace.WriteLine($"\t于{DateTime.Now.ToLongTimeString()}\t接收到{e.Message}", "“dlx handler”>");
+            //Trace.WriteLine($"\t于{DateTime.Now.ToLongTimeString()}\t接收到{e.Message}", "“dlx handler”>");
             return true;
         }
     }
