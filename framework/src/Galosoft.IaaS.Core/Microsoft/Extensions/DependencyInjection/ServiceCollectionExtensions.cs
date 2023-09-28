@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Galosoft.IaaS.Core;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Loader;
@@ -27,5 +30,34 @@ namespace Microsoft.Extensions.DependencyInjection
         //    }
         //    return services;
         //}
+
+        /// <summary>
+        /// inject object serializer.
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <param name="services"></param>
+        /// <returns></returns>
+        public static IServiceCollection AddObjectSerializer(this IServiceCollection services)
+        {
+            services.TryAddSingleton<IObjectSerializer, MicrosoftJsonSerializer>();
+            return services;
+        }
+
+        public static IServiceCollection AddSnowflakeId(this IServiceCollection services, IConfigurationSection? configSection = null)
+        {
+            services.TryAddSingleton<ISnowflakeIdGenerator>(sp =>
+            {
+                var workerId = 1;
+                if (configSection == null)
+                {
+                    var config = sp.GetRequiredService<IConfiguration>();
+                    configSection = config.GetSection("SnowflakeId:WorkerId");
+                    workerId = configSection.Get<int>();
+                }
+                return new SnowflakeId(workerId);
+            });
+            return services;
+        }
+
     }
 }

@@ -3,18 +3,14 @@ using AngleSharp.Html.Parser;
 using Dev.Application;
 using Dev.Application.Contracts;
 using Dev.ConsoleApp.DynamicProxy;
-using Dev.ConsoleApp.Entities;
 using Dev.ConsoleApp.RestClients;
-using Dev.ConsoleApp.Rmq;
 using Dev.ConsoleApp.Services;
 using Dev.ConsoleApp.WindowsAPI;
 using Dev.Core.Models;
-using Dev.Entities;
 using FreeRedis;
 using Galosoft.IaaS.Core;
 using Galosoft.IaaS.Dev;
 using Galosoft.IaaS.Redis;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -24,9 +20,7 @@ using Newtonsoft.Json;
 using Org.Apache.Rocketmq;
 using RabbitMQ.Client;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -54,7 +48,7 @@ namespace Dev.ConsoleApp
         private readonly IServiceProvider _root;
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly IObjectSerializer _serializer;
-        private readonly SnowflakeIdGenerator _snowflakeId;
+        private readonly ISnowflakeIdGenerator _snowflakeId;
         private readonly RmqClient _rmq;
         private readonly HttpClient _client;
 
@@ -73,7 +67,7 @@ namespace Dev.ConsoleApp
             IServiceProvider root,
             IServiceScopeFactory scopeFactory,
             IObjectSerializer serializer,
-            SnowflakeIdGenerator snowflakeId,
+            ISnowflakeIdGenerator snowflakeId,
             RmqClient rmq)
         {
             _performanceTester = performanceTester;
@@ -116,8 +110,8 @@ namespace Dev.ConsoleApp
         private async Task RmqTestAsync()
         {
             var topic = "oc_test";
-            //await _rmq.DistributeAsync(RestResult.Succeed("rmq"), new RmqProperty(), $"{topic}", _snowflakeId.nextId().ToString());
-            //await _rmq.DistributeAsync(RestResult.Succeed("rmq"), new RmqProperty(mGroup:"fifo"), $"{topic}-fifo", _snowflakeId.nextId().ToString());
+            await _rmq.DistributeAsync(RestResult.Succeed("rmq"), new RmqProperty(), $"{topic}", _snowflakeId.NextId().ToString());
+            //await _rmq.DistributeAsync(RestResult.Succeed("rmq"), new RmqProperty(mGroup: "fifo"), $"{topic}-fifo", _snowflakeId.NextId().ToString());
             //await _rmq.DistributeAsync(RestResult.Succeed("rmq"), new RmqProperty(), $"{topic}-delay", _snowflakeId.nextId().ToString());
             await _rmq.HandleAsync<RestResult>(async msg =>
             {

@@ -2,7 +2,6 @@
   <Import Project="../../../common.props" />
 
   <ItemGroup>
-    <PackageReference Include="newtonsoft.json" Version="13.0.3" />
     <PackageReference Include="polly" Version="7.2.3" />
     <PackageReference Include="rabbitmq.client" Version="6.2.2" />
   </ItemGroup>
