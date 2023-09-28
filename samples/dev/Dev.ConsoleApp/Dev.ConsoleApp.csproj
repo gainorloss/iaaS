@@ -20,7 +20,6 @@
 		<PackageReference Include="system.text.json" Version="6.0.5" />
 		<PackageReference Include="Microsoft.NET.Build.Containers" Version="0.3.2" />
 		<PackageReference Include="toolgood.words" Version="3.1.0" />
-		<PackageReference Include="vanara.pinvoke.user32" Version="3.4.15" />
 	</ItemGroup>
 
 	<ItemGroup>

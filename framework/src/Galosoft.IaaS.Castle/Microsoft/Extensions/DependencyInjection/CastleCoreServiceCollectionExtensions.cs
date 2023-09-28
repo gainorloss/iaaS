@@ -20,7 +20,9 @@ namespace Microsoft.Extensions.DependencyInjection
             if (registrationSettings is null)
                 registrationSettings = new KeyValuePair<Func<Type, bool>, ServiceRegistrationType>[] { };
 
-            registrationSettings = registrationSettings.Concat(new[] { KeyValuePair.Create((Type t) => t.HasCustomeAttribute<ComponentAttribute>(false), ServiceRegistrationType.Transient) }).ToArray();//默认 标记ComponentAttribute 的非泛型具体类
+            registrationSettings = registrationSettings.Concat(new[] { KeyValuePair.Create((Type t) => t.HasCustomeAttribute<ComponentAttribute>(false), ServiceRegistrationType.Transient) })
+                .Concat(new[] { KeyValuePair.Create((Type t) => t.IsAssignableFrom(typeof(IInterceptor)), ServiceRegistrationType.Transient) })
+                .ToArray();//默认 标记ComponentAttribute 的非泛型具体类
 
             var classTypes = DependencyContext.Default.GetClassTypes();
             services.TryAddSingleton<ProxyGenerator>();
@@ -47,15 +49,10 @@ namespace Microsoft.Extensions.DependencyInjection
                         Tracer.Verbose($"{(registrationSetting.Value)}：\t{componentType.Name}（{serviceType.Name}）", "依赖项分析");
                         continue;
                     }
-
-                    foreach (var interceptor in interceptors)
-                    {
-                        services.AddTransient(typeof(IInterceptor), interceptor.GetType());//Inject interceptors.
-                    }
                     services.TryAdd(componentType, registrationSetting.Value);
 
                     var interceptorTypes = interceptors.Select(i => i.GetType());
-                    services.TryAdd(serviceType, sp =>
+                    services.TryAddReplace(serviceType, sp =>
                     {
                         var generator = sp.GetRequiredService<ProxyGenerator>();
 

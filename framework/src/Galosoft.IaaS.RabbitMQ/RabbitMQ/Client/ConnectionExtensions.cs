@@ -105,12 +105,12 @@ namespace RabbitMQ.Client
         /// <exception cref="ArgumentNullException"></exception>
         public static void Handle<T>(
             this IConnectionFactory factory,
-            HandlerProperty property,
+            IHandlerProperty property,
             Func<T, Task<bool>> handler,
             string queue = "",
             string exchange = "",
             QueueArgument arguments = null,
-            IObjectSerializer? serializer = null)
+            IObjectSerializer? serializer = null) where T : class
         {
             if (property is null)
                 throw new ArgumentNullException(nameof(property));
@@ -151,13 +151,13 @@ namespace RabbitMQ.Client
             if (property.AsyncEnabled)//同步
             {
                 var consumer = new AsyncEventingBasicConsumer(channel);
-                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync(channel, e, property, handler, queue, arguments, serializer);
+                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync<T>(channel, e, property, handler, queue, arguments, serializer);
                 channel.BasicConsume(queue, false, consumer);
             }
             else
             {
                 var consumer = new EventingBasicConsumer(channel);
-                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync(channel, e, property, handler, queue, arguments, serializer);
+                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync<T>(channel, e, property, handler, queue, arguments, serializer);
                 channel.BasicConsume(queue, false, consumer);
             }
         }
@@ -178,7 +178,7 @@ namespace RabbitMQ.Client
         /// <exception cref="ArgumentNullException"></exception>
         public static void Handle(
             this IConnectionFactory factory,
-            HandlerProperty property,
+            IHandlerProperty property,
             Func<object, Task<bool>> handler,
             Type msgType,
             string queue = "",
@@ -225,13 +225,13 @@ namespace RabbitMQ.Client
             if (property.AsyncEnabled)//同步
             {
                 var consumer = new AsyncEventingBasicConsumer(channel);
-                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync(channel, e, property, handler, queue, arguments, serializer);
+                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync(channel, e, property, handler, msgType, queue, arguments, serializer);
                 channel.BasicConsume(queue, false, consumer);
             }
             else
             {
                 var consumer = new EventingBasicConsumer(channel);
-                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync(channel, e, property, handler, queue, arguments, serializer);
+                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync(channel, e, property, handler, msgType, queue, arguments, serializer);
                 channel.BasicConsume(queue, false, consumer);
             }
         }
@@ -291,7 +291,7 @@ namespace RabbitMQ.Client
                     var json = serializer.Serialize(msg);
                     channel.BasicPublish(broadcast ? routeKey : string.Empty, routeKey, props, Encoding.UTF8.GetBytes(json));
 
-                    Trace.WriteLine($"\t{(broadcast ? "交换机" : "队列")}：【{routeKey}】,长度：【{Encoding.UTF8.GetByteCount(json)}】", $"“消息发送”>");
+                    //Trace.WriteLine($"\t{(broadcast ? "交换机" : "队列")}：【{routeKey}】,长度：【{Encoding.UTF8.GetByteCount(json)}】", $"“消息发送”>");
                 }
             }
         }
@@ -348,7 +348,65 @@ namespace RabbitMQ.Client
             }
         }
 
-        internal static async Task HandleIdempotentlyInternalAsync<T>(IModel channel, BasicDeliverEventArgs e, HandlerProperty property, Func<T, Task<bool>> handler, string queue = "", QueueArgument? arguments = null, IObjectSerializer? serializer = null)
+        internal static async Task HandleIdempotentlyInternalAsync(IModel channel, BasicDeliverEventArgs e, IHandlerProperty property, Func<object, Task<bool>> handler, Type msgType, string queue = "", QueueArgument? arguments = null, IObjectSerializer? serializer = null)
+        {
+            var bytes = e.Body.ToArray();
+            var message = Encoding.UTF8.GetString(bytes);
+            if (string.IsNullOrWhiteSpace(message))
+                return;
+
+            var @event = serializer.Deserialize(message, msgType);
+            if (@event == null)
+                return;
+
+            if (handler == null)
+                return;
+
+            string key = string.Empty;
+            if (e.BasicProperties.TryGetMessageKey(out var msgKey))//修改： 改为使用MessageKey做幂等键 
+            {
+                //TODO：使用redis进行幂等处理
+                Trace.WriteLine($"\tmsg key：{msgKey}", "“消息处理”>");
+
+                key = string.Format(arguments.IdempotenceKeyFormat, $"{queue}:{msgKey}");
+                if (await arguments.Redis.ExistsAsync(key))
+                {
+                    Trace.WriteLine($"幂等检查：\tmsg key：{msgKey}【已处理】忽略", "“消息处理”>");
+                    channel.BasicAck(e.DeliveryTag, false); //manua ack.
+                    return;
+                }
+            }
+
+            var policyBuilder = Policy.Handle<Exception>()
+            .OrResult<bool>(r => !r);
+
+            IAsyncPolicy<bool> policy = policyBuilder.FallbackAsync(async ct => await Task.FromResult(property.ConfirmedIfException), async ex => await Task.FromResult(property.ConfirmedIfException));
+
+            if (property.RetryTimes > 0)
+            {
+                var retry = policyBuilder.WaitAndRetryAsync(property.RetryTimes, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, timeSpan, retryCount, context) =>
+                {
+                    var msg = exception.Exception is null
+                      ? "业务执行失败"
+                      : $"未知错误，{exception.Exception.Message}";
+                    Trace.WriteLine($"\t开始第【{retryCount}】次重试 ，原因：{msg}", "“消息处理”>");
+                });
+                policy = policy.WrapAsync(retry);
+            }
+
+            var confirmed = await policy.ExecuteAsync(async () => await handler.Invoke(@event));
+
+            if (confirmed)
+            {
+                if (!string.IsNullOrEmpty(key))
+                    await arguments.Redis.SetAsync(key, 1, arguments.IdempotenceExpires);//redis标记已处理
+
+                channel.BasicAck(e.DeliveryTag, false);
+            }
+            else
+                channel.BasicReject(e.DeliveryTag, true);
+        }
+        internal static async Task HandleIdempotentlyInternalAsync<T>(IModel channel, BasicDeliverEventArgs e, IHandlerProperty property, Func<T, Task<bool>> handler, string queue = "", QueueArgument? arguments = null, IObjectSerializer? serializer = null)
         {
             var bytes = e.Body.ToArray();
             var message = Encoding.UTF8.GetString(bytes);
@@ -406,7 +464,6 @@ namespace RabbitMQ.Client
             else
                 channel.BasicReject(e.DeliveryTag, true);
         }
-
         private static Dictionary<string, object> GetArgsByQueueArgument(string routeKey, QueueArgument? arguments)
         {
             if (arguments == null)
@@ -575,7 +632,7 @@ namespace RabbitMQ.Client
             string queueType = "classic",
             string queueMode = "default",
             bool declared = false,
-            string? idempotenceKeyFormat = null,
+            string idempotenceKeyFormat = "{0}",
             int idempotenceExpires = 24 * 60 * 3600,
             RedisClient? redis = null)
         {
@@ -588,8 +645,12 @@ namespace RabbitMQ.Client
             IdempotenceExpires = idempotenceExpires;
             Redis = redis;
 
-            if (!string.IsNullOrEmpty(idempotenceKeyFormat) && idempotenceKeyFormat.Contains("{0}") && redis == null)
-                throw new ArgumentNullException($"{nameof(QueueArgument)}.{nameof(Redis)}");
+            idempotenceKeyFormat = string.IsNullOrEmpty(idempotenceKeyFormat)
+                ? "{0}"
+                : idempotenceKeyFormat;
+
+            if (!idempotenceKeyFormat.Contains("{0}"))
+                idempotenceKeyFormat = string.Concat(idempotenceKeyFormat, ":{0}");
         }
 
         /// <summary>
@@ -618,7 +679,7 @@ namespace RabbitMQ.Client
         public bool ResourceDeclared { get; protected set; }
 
         /// <summary>
-        /// 幂等Key设置 eg.oc:{queue_name}:{0} {0}占位 QueueName:MessageId
+        /// 幂等Key设置 eg.oc:{0} {0}占位 QueueName:MessageId
         /// </summary>
         public string IdempotenceKeyFormat { get; protected set; }
 
@@ -633,20 +694,41 @@ namespace RabbitMQ.Client
         public int IdempotenceExpires { get; internal set; }
     }
 
+    public interface IHandlerProperty
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        bool ConfirmedIfException { get; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        ushort PrefetchCount { get; }
+
+        /// <summary>
+        /// 重试次数 新增：galo@2023-5-29 13:56:17
+        /// </summary>
+        int RetryTimes { get; }
+
+        /// <summary>
+        /// 异步消费者启用 新增：galo@2023-8-23 11:13:10
+        /// </summary>
+        bool AsyncEnabled { get; }
+    }
     /// <summary>
     /// handler property.
     /// </summary>
-    public class HandlerProperty
+    public class HandlerProperty : IHandlerProperty
     {
         /// <summary>
         /// 
         /// </summary>
         public HandlerProperty()
         {
-            PrefetchCount = 5;
+            PrefetchCount = 20;
             ConfirmedIfException = false;
-            HandlerQty = 1;
-            RetryTimes = 0;
+            RetryTimes = 3;
             AsyncEnabled = true;
         }
 
@@ -680,11 +762,6 @@ namespace RabbitMQ.Client
         /// 重试次数 新增：galo@2023-5-29 13:56:17
         /// </summary>
         public int RetryTimes { get; protected set; }
-
-        /// <summary>
-        /// 处理器数量 新增：galo@2022-2-9 11:24:36
-        /// </summary>
-        public int HandlerQty { get; set; }
 
         /// <summary>
         /// 异步消费者启用 新增：galo@2023-8-23 11:13:10
@@ -802,7 +879,7 @@ namespace RabbitMQ.Client
         {
             var classTypes = DependencyContext.Default.GetClassTypes();
             var mis = classTypes.SelectMany(i => i.GetMethods())
-            .Where(m => m.GetCustomAttribute<QueueAttribute>(false) != null);
+            .Where(m => m.GetCustomAttribute<RabbitMQHandlerAttribute>(false) != null);
             if (mis is null || !mis.Any())
                 return;
 
@@ -814,11 +891,12 @@ namespace RabbitMQ.Client
 
                 foreach (var mi in mis)
                 {
-                    var queue = mi.GetCustomAttribute<QueueAttribute>();
+                    var handler = mi.GetCustomAttribute<RabbitMQHandlerAttribute>();
                     var paras = mi.GetParameters();
                     var first = paras[0];
                     var firstType = first.ParameterType;
-                    factory.Handle(new HandlerProperty(20, true, retryTimes: 3), msg =>
+                    var handlerProp = handler as IHandlerProperty;
+                    factory.Handle(handlerProp, msg =>
                     {
                         using (var scope = root.CreateScope())
                         {
@@ -836,7 +914,7 @@ namespace RabbitMQ.Client
                                 }
                                 else
                                 {
-                                    parameters.Add(serializer.Deserialize(msg.ToString(),firstType));
+                                    parameters.Add(msg);
                                 }
                             }
                             #region 1. 反射调用
@@ -850,8 +928,8 @@ namespace RabbitMQ.Client
                         }
                     }
                     , msgType: firstType
-                    , queue: queue.Name
-                    , arguments: new QueueArgument(declared: queue.ResourceDeclared, idempotenceKeyFormat: string.Join(":", queue.Name, "{0}"), redis: redis));
+                    , queue: handler.Name
+                    , arguments: new QueueArgument(declared: handler.ResourceDeclared, idempotenceKeyFormat: string.Join(":", handler.Name, "{0}"), redis: redis));
                 }
             }
         }
@@ -881,6 +959,12 @@ namespace RabbitMQ.Client
                 return Task.FromResult(b);
 
             return Task.FromResult(true);
+        }
+
+        public static Task<bool> DelegateInvoke(MethodInfo mi, object instance, params object[] parameters)
+        {
+            var @delegate = mi.CreateDelegate(typeof(Func<object, Task<bool>>), instance) as Func<object, Task<bool>>;
+            return @delegate.Invoke(parameters.First());
         }
     }
 }

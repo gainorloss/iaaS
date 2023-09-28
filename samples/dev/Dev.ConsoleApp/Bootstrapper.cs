@@ -1,11 +1,10 @@
 ﻿using AngleSharp;
 using AngleSharp.Html.Parser;
-using Dev.Application;
 using Dev.Application.Contracts;
 using Dev.ConsoleApp.DynamicProxy;
+using Dev.ConsoleApp.Handlers;
 using Dev.ConsoleApp.RestClients;
 using Dev.ConsoleApp.Services;
-using Dev.ConsoleApp.WindowsAPI;
 using Dev.Core.Models;
 using FreeRedis;
 using Galosoft.IaaS.Core;
@@ -22,7 +21,6 @@ using Org.Apache.Rocketmq;
 using RabbitMQ.Client;
 using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -30,7 +28,6 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using ToolGood.Words;
-using Vanara.PInvoke;
 
 namespace Dev.ConsoleApp
 {
@@ -94,20 +91,16 @@ namespace Dev.ConsoleApp
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            //await NacosConfigTestAsync();
             //var json = await _jsonPlaceholderClient.PostsGetAsync();
 
-            //await DlxTestAsync();
+            await DlxTestAsync();
             //await InvokeTestAsync();
             //await CsbinTestAsync();
-            //await RedisCodeGeneratorTestAsync();
             //_component.ThrowException();
             //_component.DisplayName();
             //DynamicProxyTest();
-            //User32Test();
             //ToolGoodWordsTest();
             //await AngleSharpTestAsync();
-            //ServiceCollectionTest();
             //await RmqTestAsync();
         }
 
@@ -124,61 +117,6 @@ namespace Dev.ConsoleApp
             }, topic, "*");
         }
 
-        private void ServiceCollectionTest()
-        {
-            //using (var scope = _scopeFactory.CreateScope())
-            //{
-            //    var sp = scope.ServiceProvider;
-            //    svc = sp.GetRequiredService<OrderService>();
-            //    var list = await svc.ListAsync();
-            //}
-            {
-                var idx = 1;
-                while (true)
-                {
-                    Console.WriteLine($"{idx++}?");
-                    Console.ReadLine();
-                    Parallel.For(0, 2000, async i =>
-                    {
-                        {
-                            //using (var scope = _scopeFactory.CreateScope())
-                            //{
-                            //    var sp = scope.ServiceProvider;
-                            //    var ctx = sp.GetRequiredService<OrderDbContext>();
-                            //    var orders = await ctx.Query<Order>().Take(100).ToListAsync();
-                            //}
-                        }
-                        {
-                            //OrderService svc = null;
-                            //using (var scope = _scopeFactory.CreateScope())
-                            //{
-                            //    var sp = scope.ServiceProvider;
-                            //    var ctx = sp.GetRequiredService<OrderDbContext>();
-                            //    svc = new OrderService(ctx);
-                            //    await svc.ListAsync();
-                            //}
-                        }
-                        {
-                            OrderService svc = null;
-                            using (var scope = _scopeFactory.CreateScope())
-                            {
-                                var sp = scope.ServiceProvider;
-                                svc = sp.GetRequiredService<OrderService>();
-                                await svc.ListAsync();
-                            }
-                        }
-
-                    });
-                }
-            }
-
-            //{
-            //    var ctx = _root.GetRequiredService<OrderDbContext>();
-            //    svc = new OrderService(ctx);
-            //    var list = await svc.ListAsync();
-            //}
-
-        }
         private async Task AngleSharpTestAsync()
         {
             var sw = Stopwatch.StartNew();
@@ -218,11 +156,6 @@ namespace Dev.ConsoleApp
             var str = iwords.Replace(test, '*');
         }
 
-        private void User32Test()
-        {
-            WindowApi.SetCursorPos(10, 10);
-        }
-
         private void DynamicProxyTest()
         {
             //var proxy = DispatchProxy.Create<IComponentSvc, DynamicProxy>();
@@ -233,45 +166,6 @@ namespace Dev.ConsoleApp
             //svc.DisplayName();
             _performanceTester.SingleThread(ctx => svc.DisplayName(), fact: "dynamic proxy", times: 10000 * 1000);
             _performanceTester.SingleThread(ctx => _component.DisplayName(), fact: "instance", times: 10000 * 1000);
-        }
-
-        private async Task RedisCodeGeneratorTestAsync()
-        {
-            var idx = 7;
-            while (idx-- >= 0)
-            {
-                _codeGenerator.CodeGenerateDaily("SC");
-            }
-
-            idx = 7;
-            while (idx-- >= 0)
-            {
-                await _codeGenerator.CodeGenerateDailyAsync("SC");
-            }
-
-            idx = 7;
-            while (idx-- >= 0)
-            {
-                _codeGenerator.CodeGenerate("JS");
-            }
-
-            idx = 7;
-            while (idx-- >= 0)
-            {
-                await _codeGenerator.CodeGenerateAsync("JS");
-            }
-
-            idx = 7;
-            while (idx-- >= 0)
-            {
-                _codeGenerator.IdentityGenerate("JS");
-            }
-
-            idx = 7;
-            while (idx-- >= 0)
-            {
-                await _codeGenerator.IdentityGenerateAsync("JS");
-            }
         }
 
         private async Task CsbinTestAsync()
@@ -291,24 +185,17 @@ namespace Dev.ConsoleApp
             var handlerProperty = new HandlerProperty(1, true, 0);
             var arguments = new QueueArgument(dlxEnabled: true, msgTtl: 15 * 60 * 1000, idempotenceKeyFormat: "spring.boot.amqp:{0}", redis: _cli);
 
-            //_factory.Handle<SpringBootAmqpTestRequest>(handlerProperty, async (e, sender, args) =>
-            //{
-            //    await Task.Delay(100);
-            //    Trace.WriteLine($"\t于{DateTime.Now.ToLongTimeString()}\t接收到{e.Message}", "“dlx func”>");
-            //    return true;
-            //}, "spring.boot.amqp.test", arguments: arguments);
-
-            //_factory.Handle<SpringBootAmqpTestRequest>(handlerProperty, async e =>
-            //{
-            //    await Task.Delay(100);
-            //    Trace.WriteLine($"\t于{DateTime.Now.ToLongTimeString()}\t接收到{e.Message}", "“dlx”>");
-            //    return true;
-            //}, "spring.boot.amqp.test", arguments: arguments);
+            _factory.Handle<SpringBootAmqpTestRequest>(handlerProperty, async e =>
+            {
+                await Task.Delay(100);
+                Trace.WriteLine($"\t于{DateTime.Now.ToLongTimeString()}\t接收到{e.Message}", "“dlx”>");
+                return true;
+            }, "spring.boot.amqp.test", arguments: arguments);
             var idx = 100000;
             while (true)
             {
                 ++idx;
-                await Task.Delay(1000);
+                await Task.Delay(10);
                 var msg = new SpringBootAmqpTestRequest
                 {
                     MessageID = idx.ToString(),
@@ -336,17 +223,6 @@ namespace Dev.ConsoleApp
                 var mi = typeof(SpringBootAmqpTestRequestHandler).GetMethod(nameof(SpringBootAmqpTestRequestHandler.Handle));
                 await _performanceTester.SingleThreadAsync(async sw => await InvokeHelper.ReflectionInvoke(mi, handler, para), times: times, fact: "reflection");
                 await _performanceTester.SingleThreadAsync(async sw => await InvokeHelper.ExpressionInvoke(mi, handler, para), times: times, fact: "expression");
-            }
-        }
-
-        private async Task NacosConfigTestAsync()
-        {
-            while (true)
-            {
-                var status = await _nacosConfig.GetServerStatus();
-                var content = await _nacosConfig.GetConfig("name", "DEFAULT_GROUP", 3000);
-                Trace.WriteLine($"nacos {DateTime.Now.ToShortTimeString()}>\t{status}:{content}");
-                await Task.Delay(3000);
             }
         }
 
@@ -413,16 +289,6 @@ namespace Dev.ConsoleApp
         }
     }
 
-    internal class SpringBootAmqpTestRequestHandler
-    {
-        [Queue("spring.boot.amqp.test", declared: true)]
-        public async Task<bool> Handle(SpringBootAmqpTestRequest e)
-        {
-            //await Task.Delay(100);
-            //Trace.WriteLine($"\t于{DateTime.Now.ToLongTimeString()}\t接收到{e.Message}", "“dlx handler”>");
-            return true;
-        }
-    }
 
     internal class EAOutput
     {

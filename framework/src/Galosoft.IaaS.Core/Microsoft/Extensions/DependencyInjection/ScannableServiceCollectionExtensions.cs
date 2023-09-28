@@ -127,6 +127,27 @@ namespace Microsoft.Extensions.DependencyInjection
             }
             return services;
         }
+
+        public static IServiceCollection TryAddReplace(this IServiceCollection services, Type serviceType, Func<IServiceProvider, object> implementationFactory, ServiceRegistrationType registrationType = ServiceRegistrationType.Transient)
+        {
+            var descriptor = services.Where(i => i.ServiceType == serviceType).FirstOrDefault();
+            if (descriptor != null)
+                services.Remove(descriptor);
+            switch (registrationType)
+            {
+                case ServiceRegistrationType.Singleton:
+                    services.AddSingleton(serviceType, implementationFactory);
+                    break;
+                case ServiceRegistrationType.Scoped:
+                    services.AddScoped(serviceType, implementationFactory);
+                    break;
+                case ServiceRegistrationType.Transient:
+                default:
+                    services.AddTransient(serviceType, implementationFactory);
+                    break;
+            }
+            return services;
+        }
     }
 
     public enum ServiceRegistrationType
