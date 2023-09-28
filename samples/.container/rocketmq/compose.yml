@@ -28,6 +28,7 @@ services:
     image: apache/rocketmq:5.1.0
     command:  ./mqproxy 
     privileged: true
+    restart: always
     ports:
       - 28080:28080
       - 28081:28081
@@ -50,6 +51,7 @@ services:
     image: registry.cn-shanghai.aliyuncs.com/galosoft/rmq-handler:2023.09.25.2
     # deploy:
     #   replicas: 1
+    restart: always
     networks:
       - rocketmq
     depends_on:
