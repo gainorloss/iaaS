@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="../../../common.props" />
+
+	<ItemGroup>
+		<ProjectReference Include="..\Galosoft.IaaS.Core\Galosoft.IaaS.Core.csproj" />
+		<ProjectReference Include="..\Galosoft.IaaS.Redis\Galosoft.IaaS.Redis.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="rocketmq.client" Version="5.1.0" />
+	</ItemGroup>
+</Project>
