@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Text.Json;
 
 namespace Galosoft.IaaS.Core
@@ -17,6 +18,14 @@ namespace Galosoft.IaaS.Core
         /// <param name="message"></param>
         /// <returns></returns>
         T Deserialize<T>(string message);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="returType"></param>
+        /// <returns></returns>
+        object Deserialize(string value, Type returType);
 
         /// <summary>
         /// 
@@ -52,6 +61,12 @@ namespace Galosoft.IaaS.Core
             return @event;
         }
 
+        public object Deserialize(string value, Type returnType)
+        {
+            var @event = System.Text.Json.JsonSerializer.Deserialize(value, returnType, _options);
+            return @event;
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -78,6 +93,12 @@ namespace Galosoft.IaaS.Core
         public T Deserialize<T>(string value)
         {
             var @event = JsonConvert.DeserializeObject<T>(value);
+            return @event;
+        }
+
+        public object Deserialize(string value, Type returnType)
+        {
+            var @event = JsonConvert.DeserializeObject(value, returnType);
             return @event;
         }
 

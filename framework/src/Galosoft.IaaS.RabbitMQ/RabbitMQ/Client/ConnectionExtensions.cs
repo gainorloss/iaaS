@@ -1,6 +1,9 @@
 using CommunityToolkit.Diagnostics;
 using FreeRedis;
 using Galosoft.IaaS.Core;
+using Galosoft.IaaS.RabbitMQ;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyModel;
 using Newtonsoft.Json;
 using Polly;
 using RabbitMQ.Client.Events;
@@ -87,7 +90,7 @@ namespace RabbitMQ.Client
         }
         #endregion
 
-        #region Handler.
+        #region Generic handler.
         /// <summary>
         /// 
         /// </summary>
@@ -144,84 +147,39 @@ namespace RabbitMQ.Client
                 #endregion
             }
 
-            var consumer = new AsyncEventingBasicConsumer(channel);
-            consumer.Received += async (sender, e) =>
+            if (property.AsyncEnabled)//同步
             {
-                var bytes = e.Body.ToArray();
-                var message = Encoding.UTF8.GetString(bytes);
-                if (string.IsNullOrWhiteSpace(message))
-                    return;
-
-                var @event = serializer.Deserialize<T>(message);
-                if (@event == null)
-                    return;
-
-                if (handler == null)
-                    return;
-
-                string key = string.Empty;
-                if (e.BasicProperties.TryGetMessageKey(out var msgKey))//修改： 改为使用MessageKey做幂等键 
-                {
-                    //TODO：使用redis进行幂等处理
-                    Trace.WriteLine($"\tmsg key：{msgKey}", "“消息处理”>");
-
-                    key = string.Format(arguments.IdempotenceKeyFormat, $"{queue}:{msgKey}");
-                    if (await arguments.Redis.ExistsAsync(key))
-                    {
-                        Trace.WriteLine($"幂等检查：\tmsg key：{msgKey}【已处理】忽略", "“消息处理”>");
-                        channel.BasicAck(e.DeliveryTag, false); //manua ack.
-                        return;
-                    }
-                }
-
-                var policyBuilder = Policy.Handle<Exception>()
-                .OrResult<bool>(r => !r);
-
-                IAsyncPolicy<bool> policy = policyBuilder.FallbackAsync(async ct => await Task.FromResult(property.ConfirmedIfException), async ex => await Task.FromResult(property.ConfirmedIfException));
-
-                if (property.RetryTimes > 0)
-                {
-                    var retry = policyBuilder.WaitAndRetryAsync(property.RetryTimes, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, timeSpan, retryCount, context) =>
-                      {
-                          var msg = exception.Exception is null
-                            ? "业务执行失败"
-                            : $"未知错误，{exception.Exception.Message}";
-                          Trace.WriteLine($"\t开始第【{retryCount}】次重试 ，原因：{msg}", "“消息处理”>");
-                      });
-                    policy = policy.WrapAsync(retry);
-                }
-
-                var confirmed = await policy.ExecuteAsync(async () => await handler.Invoke(@event));
-
-                if (confirmed)
-                {
-                    if (!string.IsNullOrEmpty(key))
-                        await arguments.Redis.SetAsync(key, 1, arguments.IdempotenceExpires);//redis标记已处理
-
-                    channel.BasicAck(e.DeliveryTag, false);
-                }
-                else
-                    channel.BasicReject(e.DeliveryTag, true);
-            };
-
-            channel.BasicConsume(queue, false, consumer);
+                var consumer = new AsyncEventingBasicConsumer(channel);
+                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync(channel, e, property, handler, queue, arguments, serializer);
+                channel.BasicConsume(queue, false, consumer);
+            }
+            else
+            {
+                var consumer = new EventingBasicConsumer(channel);
+                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync(channel, e, property, handler, queue, arguments, serializer);
+                channel.BasicConsume(queue, false, consumer);
+            }
         }
+        #endregion
 
+        #region Type handler.
         /// <summary>
         /// 
         /// </summary>
-        /// <typeparam name="T"></typeparam>
         /// <param name="factory"></param>
         /// <param name="property"></param>
         /// <param name="handler"></param>
+        /// <param name="msgType"></param>
         /// <param name="queue"></param>
         /// <param name="exchange"></param>
         /// <param name="arguments"></param>
+        /// <param name="serializer"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        public static void Handle<T>(
+        public static void Handle(
             this IConnectionFactory factory,
             HandlerProperty property,
-            Func<T, object, BasicDeliverEventArgs, Task<bool>> handler,
+            Func<object, Task<bool>> handler,
+            Type msgType,
             string queue = "",
             string exchange = "",
             QueueArgument arguments = null,
@@ -263,67 +221,18 @@ namespace RabbitMQ.Client
                 #endregion
             }
 
-            var consumer = new AsyncEventingBasicConsumer(channel);
-            consumer.Received += async (sender, e) =>
+            if (property.AsyncEnabled)//同步
             {
-                var bytes = e.Body.ToArray();
-                var message = Encoding.UTF8.GetString(bytes);
-                if (string.IsNullOrWhiteSpace(message))
-                    return;
-
-                var @event = serializer.Deserialize<T>(message);
-                if (@event == null)
-                    return;
-
-                if (handler == null)
-                    return;
-
-                string key = string.Empty;
-                if(e.BasicProperties.TryGetMessageKey(out var msgKey))//修改： 改为使用MessageKey做幂等键 
-                {
-                    //TODO：使用redis进行幂等处理
-                    Trace.WriteLine($"\tmsg key：{msgKey}", "“消息处理”>");
-
-                    key = string.Format(arguments.IdempotenceKeyFormat, $"{queue}:{msgKey}");
-                    if (await arguments.Redis.ExistsAsync(key))
-                    {
-                        Trace.WriteLine($"幂等检查：\tmsg key：{msgKey}【已处理】忽略", "“消息处理”>");
-                        channel.BasicAck(e.DeliveryTag, false); //manua ack.
-                        return;
-                    }
-                }
-
-                var policyBuilder = Policy.Handle<Exception>()
-                .OrResult<bool>(r => !r);
-
-                IAsyncPolicy<bool> policy = policyBuilder.FallbackAsync(async ct => await Task.FromResult(property.ConfirmedIfException), async ex => await Task.FromResult(property.ConfirmedIfException));
-
-                if (property.RetryTimes > 0)
-                {
-                    var retry = policyBuilder.WaitAndRetryAsync(property.RetryTimes, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, timeSpan, retryCount, context) =>
-                    {
-                        var msg = exception.Exception is null
-                          ? "业务执行失败"
-                          : $"未知错误，{exception.Exception.Message}";
-                        Trace.WriteLine($"\t开始第【{retryCount}】次重试 ，原因：{msg}", "“消息处理”>");
-                    });
-                    policy = policy.WrapAsync(retry);
-                }
-
-                var confirmed = await policy.ExecuteAsync(async () => await handler.Invoke(@event, sender, e));
-
-                if (confirmed)
-                {
-                    if (!string.IsNullOrEmpty(key))
-                        await arguments.Redis.SetAsync(key, 1, 24 * 60 * 3600);//redis标记已处理
-
-                    channel.BasicAck(e.DeliveryTag, false);
-                }
-                else
-                    channel.BasicReject(e.DeliveryTag, true);
-            };
-
-            channel.BasicConsume(queue, false, consumer);
+                var consumer = new AsyncEventingBasicConsumer(channel);
+                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync(channel, e, property, handler, queue, arguments, serializer);
+                channel.BasicConsume(queue, false, consumer);
+            }
+            else
+            {
+                var consumer = new EventingBasicConsumer(channel);
+                consumer.Received += async (sender, e) => await HandleIdempotentlyInternalAsync(channel, e, property, handler, queue, arguments, serializer);
+                channel.BasicConsume(queue, false, consumer);
+            }
         }
         #endregion
 
@@ -436,6 +345,65 @@ namespace RabbitMQ.Client
                 channel.BasicPublish(broadcast ? routeKey : string.Empty, routeKey, props, Encoding.UTF8.GetBytes(json));
                 Trace.WriteLine($"\t{(broadcast ? "交换机" : "队列")}：【{routeKey}】,长度：【{Encoding.UTF8.GetByteCount(json)}】", $"“消息发送”>");
             }
+        }
+
+        internal static async Task HandleIdempotentlyInternalAsync<T>(IModel channel, BasicDeliverEventArgs e, HandlerProperty property, Func<T, Task<bool>> handler, string queue = "", QueueArgument? arguments = null, IObjectSerializer? serializer = null)
+        {
+            var bytes = e.Body.ToArray();
+            var message = Encoding.UTF8.GetString(bytes);
+            if (string.IsNullOrWhiteSpace(message))
+                return;
+
+            var @event = serializer.Deserialize<T>(message);
+            if (@event == null)
+                return;
+
+            if (handler == null)
+                return;
+
+            string key = string.Empty;
+            if (e.BasicProperties.TryGetMessageKey(out var msgKey))//修改： 改为使用MessageKey做幂等键 
+            {
+                //TODO：使用redis进行幂等处理
+                Trace.WriteLine($"\tmsg key：{msgKey}", "“消息处理”>");
+
+                key = string.Format(arguments.IdempotenceKeyFormat, $"{queue}:{msgKey}");
+                if (await arguments.Redis.ExistsAsync(key))
+                {
+                    Trace.WriteLine($"幂等检查：\tmsg key：{msgKey}【已处理】忽略", "“消息处理”>");
+                    channel.BasicAck(e.DeliveryTag, false); //manua ack.
+                    return;
+                }
+            }
+
+            var policyBuilder = Policy.Handle<Exception>()
+            .OrResult<bool>(r => !r);
+
+            IAsyncPolicy<bool> policy = policyBuilder.FallbackAsync(async ct => await Task.FromResult(property.ConfirmedIfException), async ex => await Task.FromResult(property.ConfirmedIfException));
+
+            if (property.RetryTimes > 0)
+            {
+                var retry = policyBuilder.WaitAndRetryAsync(property.RetryTimes, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (exception, timeSpan, retryCount, context) =>
+                {
+                    var msg = exception.Exception is null
+                      ? "业务执行失败"
+                      : $"未知错误，{exception.Exception.Message}";
+                    Trace.WriteLine($"\t开始第【{retryCount}】次重试 ，原因：{msg}", "“消息处理”>");
+                });
+                policy = policy.WrapAsync(retry);
+            }
+
+            var confirmed = await policy.ExecuteAsync(async () => await handler.Invoke(@event));
+
+            if (confirmed)
+            {
+                if (!string.IsNullOrEmpty(key))
+                    await arguments.Redis.SetAsync(key, 1, arguments.IdempotenceExpires);//redis标记已处理
+
+                channel.BasicAck(e.DeliveryTag, false);
+            }
+            else
+                channel.BasicReject(e.DeliveryTag, true);
         }
 
         private static Dictionary<string, object> GetArgsByQueueArgument(string routeKey, QueueArgument? arguments)
@@ -676,6 +644,7 @@ namespace RabbitMQ.Client
             ConfirmedIfException = false;
             HandlerQty = 1;
             RetryTimes = 0;
+            AsyncEnabled = true;
         }
 
         /// <summary>
@@ -683,12 +652,15 @@ namespace RabbitMQ.Client
         /// </summary>
         /// <param name="prefetchCount"></param>
         /// <param name="confirmedIfException"></param>
-        public HandlerProperty(ushort prefetchCount, bool confirmedIfException, int retryTimes = 0)
+        /// <param name="retryTimes"></param>
+        /// <param name="asyncEnabled"></param>
+        public HandlerProperty(ushort prefetchCount, bool confirmedIfException, int retryTimes = 0, bool asyncEnabled = true)
             : this()
         {
             PrefetchCount = prefetchCount;
             ConfirmedIfException = confirmedIfException;
             RetryTimes = retryTimes;
+            AsyncEnabled = asyncEnabled;
         }
 
         /// <summary>
@@ -710,6 +682,11 @@ namespace RabbitMQ.Client
         /// 处理器数量 新增：galo@2022-2-9 11:24:36
         /// </summary>
         public int HandlerQty { get; set; }
+
+        /// <summary>
+        /// 异步消费者启用 新增：galo@2023-8-23 11:13:10
+        /// </summary>
+        public bool AsyncEnabled { get; protected set; }
     }
 
 }
@@ -806,3 +783,79 @@ namespace RabbitMQ.Client
     }
 }
 
+
+namespace RabbitMQ.Client
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class ConnectionHandlerExtensions
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="root"></param>
+        public static void RegisterAllHandlers(this IServiceProvider root)
+        {
+            var classTypes = DependencyContext.Default.GetClassTypes();
+            var mis = classTypes.SelectMany(i => i.GetMethods())
+            .Where(m => m.GetCustomAttribute<QueueAttribute>(false) != null);
+            if (mis is null || !mis.Any())
+                return;
+
+            using (var scope = root.CreateScope())
+            {
+                var sp = scope.ServiceProvider;
+                var factory = sp.GetRequiredService<IConnectionFactory>();
+                var redis = root.GetRequiredService<RedisClient>();
+
+                foreach (var mi in mis)
+                {
+                    var queue = mi.GetCustomAttribute<QueueAttribute>();
+                    var paras = mi.GetParameters();
+                    var first = paras[0];
+                    var firstType = first.ParameterType;
+                    factory.Handle(new HandlerProperty(20, true, retryTimes: 3), msg =>
+                    {
+                        using (var scope = root.CreateScope())
+                        {
+                            var sp = scope.ServiceProvider;
+                            var instance = sp.GetRequiredService(mi.DeclaringType);
+
+                            var serializer = sp.GetRequiredService<IObjectSerializer>();
+
+                            #region TODO:优化调用方式 当前为反射
+                            var parameters = new List<object>();
+                            if (paras.Any())
+                            {
+                                if (firstType.IsPrimitive || firstType == typeof(string))
+                                {
+                                    parameters.Add(Convert.ChangeType(msg, firstType));
+                                }
+                                else
+                                {
+                                    parameters.Add(msg);
+                                }
+                            }
+                            var rt = mi.Invoke(instance, parameters.ToArray());
+                            if (mi.ReturnType.IsAssignableTo(typeof(Task)))
+                            {
+                                var task = rt as Task;
+                                task.ConfigureAwait(false);
+                                rt = task.GetType().GetProperty("Result").GetValue(rt);
+                            }
+                            if (rt is Boolean b)
+                                return Task.FromResult(b);
+
+                            return Task.FromResult(true);
+                            #endregion
+                        }
+                    }
+                    , msgType: firstType
+                    , queue: queue.Name
+                    , arguments: new QueueArgument(declared: queue.ResourceDeclared, idempotenceKeyFormat: string.Join(":", queue.Name, "{0}"), redis: redis));
+                }
+            }
+        }
+    }
+}

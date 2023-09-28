@@ -10,6 +10,7 @@ using Dev.Core.Models;
 using FreeRedis;
 using Galosoft.IaaS.Core;
 using Galosoft.IaaS.Dev;
+using Galosoft.IaaS.RabbitMQ;
 using Galosoft.IaaS.Redis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -94,7 +95,7 @@ namespace Dev.ConsoleApp
             //await NacosConfigTestAsync();
             //var json = await _jsonPlaceholderClient.PostsGetAsync();
 
-            //await DlxTestAsync();
+            await DlxTestAsync();
             //await CsbinTestAsync();
             //await RedisCodeGeneratorTestAsync();
             //_component.ThrowException();
@@ -104,7 +105,7 @@ namespace Dev.ConsoleApp
             //ToolGoodWordsTest();
             //await AngleSharpTestAsync();
             //ServiceCollectionTest();
-            await RmqTestAsync();
+            //await RmqTestAsync();
         }
 
         private async Task RmqTestAsync()
@@ -282,15 +283,17 @@ namespace Dev.ConsoleApp
         }
         private async Task DlxTestAsync()
         {
+            _root.RegisterAllHandlers();
+
             var handlerProperty = new HandlerProperty(1, true, 0);
             var arguments = new QueueArgument(dlxEnabled: true, msgTtl: 15 * 60 * 1000, idempotenceKeyFormat: "spring.boot.amqp:{0}", redis: _cli);
 
-            _factory.Handle<SpringBootAmqpTestRequest>(handlerProperty, async (e, sender, args) =>
-            {
-                await Task.Delay(100);
-                Trace.WriteLine($"\t于{DateTime.Now.ToLongTimeString()}\t接收到{e.Message}", "“dlx”>");
-                return true;
-            }, "spring.boot.amqp.test", arguments: arguments);
+            //_factory.Handle<SpringBootAmqpTestRequest>(handlerProperty, async (e, sender, args) =>
+            //{
+            //    await Task.Delay(100);
+            //    Trace.WriteLine($"\t于{DateTime.Now.ToLongTimeString()}\t接收到{e.Message}", "“dlx func”>");
+            //    return true;
+            //}, "spring.boot.amqp.test", arguments: arguments);
 
             //_factory.Handle<SpringBootAmqpTestRequest>(handlerProperty, async e =>
             //{
@@ -383,6 +386,17 @@ namespace Dev.ConsoleApp
             {
                 return Encoding.UTF8.GetByteCount(Message);
             }
+        }
+    }
+
+    internal class SpringBootAmqpTestRequestHandler
+    {
+        [Queue("spring.boot.amqp.test", declared: true)]
+        public async Task<bool> Handle(SpringBootAmqpTestRequest e)
+        {
+            //await Task.Delay(100);
+            Trace.WriteLine($"\t于{DateTime.Now.ToLongTimeString()}\t接收到{e.Message}", "“dlx handler”>");
+            return true;
         }
     }
 

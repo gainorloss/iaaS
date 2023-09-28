@@ -2,9 +2,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using RabbitMQ.Client;
 using System;
+using System.Reflection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ServiceCollectionExtensions
     {
         /// <summary>
@@ -34,9 +38,27 @@ namespace Microsoft.Extensions.DependencyInjection
                     Password = configSection["Password"],
                     VirtualHost = configSection["VirtualHost"]
                 };
+
+                var asyncEnabled = configSection.GetValue<bool>("AsyncEnabled");
+                cf.DispatchConsumersAsync = asyncEnabled;
+
                 var appName = configSection.GetValue<string>("AppName");
                 if (!string.IsNullOrEmpty(appName))
                     cf.ClientProvidedName = appName;
+
+                if (string.IsNullOrEmpty(cf.ClientProvidedName))
+                {
+                    var entry = Assembly.GetEntryAssembly();
+
+                    if (entry != null)
+                    {
+                        var entryName = entry.GetName();
+                        if (entryName is not null)
+                        {
+                            cf.ClientProvidedName = entryName.Name;
+                        }
+                    }
+                }
 
                 return cf;
             });//新增：配置合并提取 galo@2022-4-25 16:29:56

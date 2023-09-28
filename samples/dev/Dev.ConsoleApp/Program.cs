@@ -71,6 +71,9 @@ namespace Dev.ConsoleApp
                 opt.EnableDetailedErrors(true);
             })
                 .AddTransient<OrderService>();
+
+
+            services.AddScannable(KeyValuePair.Create((Type t) => t.Name.EndsWith("Handler"), ServiceRegistrationType.Transient));
         }
     }
 }
